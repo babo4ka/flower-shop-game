@@ -75,3 +75,6 @@ crashlytics-build.properties
 /Assets/TextMesh Pro.meta
 
 /Packages/com.binarycharm*
+
+/Assets/DataBase/DB/gameDataBase.db
+/Assets/DataBase/DB/gameDataBase.db.meta
