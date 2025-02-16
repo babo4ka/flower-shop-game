@@ -10,7 +10,6 @@ public class DataBaseManager: MonoBehaviour
         // Путь к базе данных
         string databasePath = Application.dataPath + "/DataBase/DB/gameDatabase.db";
 
-
         // Создание подключения к базе данных
         _dbConnection = new SQLiteConnection(databasePath);
 
