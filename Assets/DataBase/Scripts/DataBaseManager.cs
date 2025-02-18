@@ -1,5 +1,6 @@
 using UnityEngine;
 using SQLite;
+using System;
 
 public class DataBaseManager: MonoBehaviour
 {
@@ -13,19 +14,23 @@ public class DataBaseManager: MonoBehaviour
         // Создание подключения к базе данных
         _dbConnection = new SQLiteConnection(databasePath);
 
-        // Создание таблицы Player
-        _dbConnection.CreateTable<Player>();
+        CreateDataBase();
 
-        // Добавление тестовых данных
-        AddPlayer("John", 100);
-        AddPlayer("Alice", 200);
+    }
 
-        // Получение и вывод данных
-        var players = _dbConnection.Table<Player>().ToList();
-        foreach (var player in players)
-        {
-            Debug.Log($"ID: {player.Id}, Name: {player.Name}, Score: {player.Score}");
-        }
+
+    private void CreateDataBase()
+    {
+        //создание таблиц в бд
+        _dbConnection.CreateTable<Shop>();
+        _dbConnection.CreateTable<Credits>();
+        _dbConnection.CreateTable<Workers>();
+        _dbConnection.CreateTable<PopularityPatterns>();
+        _dbConnection.CreateTable<Flowers>();
+        _dbConnection.CreateTable<ShopFlowers>();
+        _dbConnection.CreateTable<EventTypes>();
+        _dbConnection.CreateTable<WorkDays>();
+        _dbConnection.CreateTable<EventsHappen>();
     }
 
     void AddPlayer(string name, int score)
