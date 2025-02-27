@@ -5,7 +5,7 @@ using SQLite;
 public class ShopFlowers
 {
     [PrimaryKey, AutoIncrement]
-    public int id { get; }
+    public int id { get; set;  }
 
     public int count_in_stock { get; set; }
 

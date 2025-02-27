@@ -5,7 +5,7 @@ using SQLite;
 public class Shop
 {
     [PrimaryKey, AutoIncrement]
-    public int id { get;}
+    public int id { get; set; }
 
     public float cash { get; set;}
     public float debt { get; set;}

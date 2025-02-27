@@ -5,7 +5,7 @@ using SQLite;
 public class PopularityPatterns
 {
     [PrimaryKey, AutoIncrement]
-    public int id { get; }
+    public int id { get; set; }
 
     public string pattern {  get; set; }
 }

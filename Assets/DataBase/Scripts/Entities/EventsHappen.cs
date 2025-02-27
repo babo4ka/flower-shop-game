@@ -5,7 +5,7 @@ using UnityEngine;
 public class EventsHappen
 {
     [PrimaryKey, AutoIncrement]
-    public int id { get; }
+    public int id { get; set; }
 
     //внешний ключ к таблице work_days
     public int work_day { get; set; }

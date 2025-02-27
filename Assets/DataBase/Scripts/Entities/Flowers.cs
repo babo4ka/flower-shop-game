@@ -5,7 +5,7 @@ using UnityEngine;
 public class Flowers
 {
     [PrimaryKey, AutoIncrement]
-    public int id { get; }
+    public int id { get; set; }
 
     public string name { get; set; }
 

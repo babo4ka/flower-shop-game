@@ -3,6 +3,8 @@ using SQLite;
 using System;
 using NUnit.Framework;
 using System.Collections.Generic;
+using System.Linq;
+using System.Globalization;
 
 public class DataBaseManager: MonoBehaviour
 {
@@ -17,7 +19,7 @@ public class DataBaseManager: MonoBehaviour
         _dbConnection = new SQLiteConnection(databasePath);
 
         CreateDataBase();
-
+        //GetFlowersDataToCheck();
         //CreateInitialPopularityPatterns();
         //CreateInitialFlowers();
     }
@@ -35,8 +37,38 @@ public class DataBaseManager: MonoBehaviour
         _dbConnection.CreateTable<EventTypes>();
         _dbConnection.CreateTable<WorkDays>();
         _dbConnection.CreateTable<EventsHappen>();
+        _dbConnection.CreateTable<PopularityStory>();
     }
 
+
+    #region временные методы загрузки данных
+    //временный метод для получения данных цветов и отображения
+    private void GetFlowersDataToCheck()
+    {
+        var flowersList2 = _dbConnection.Query<FlowersWithPattern>(
+            @"select flowers.id as flower_id, flowers.name, popularity_patterns.pattern as popularity_pattern, flowers.popularity_coefficient, flowers.market_price, flowers.noise 
+            from flowers join popularity_patterns on flowers.popularity_pattern = popularity_patterns.Id"
+            );
+        
+        flowersList2.ForEach(f =>
+        {
+            Debug.Log($"{f.name} {f.popularity_pattern} {f.popularity_coefficient} {f.market_price} {f.noise}");
+
+            List<float> storyPatternAsFloat = new();
+            var story = f.popularity_pattern.Split("-").ToList();
+            story.ForEach(it => { storyPatternAsFloat.Add(float.Parse(it, CultureInfo.InvariantCulture.NumberFormat)); });
+
+            storyPatternAsFloat.ForEach(s =>
+            {
+                var sInT = new PopularityStory { flower_id = f.flower_id, popularity_level = s };
+                _dbConnection.Insert(sInT);
+            });
+        });
+    }
+
+    #endregion
+
+    #region временные методы создания
     //временный метод для создания базовых паттернов популярности цветов
     private void CreateInitialPopularityPatterns() 
     {
@@ -73,12 +105,8 @@ public class DataBaseManager: MonoBehaviour
             _dbConnection.Insert(f);
         }
     }
+    #endregion
 
-    void AddPlayer(string name, int score)
-    {
-        var player = new Player { Name = name, Score = score };
-        _dbConnection.Insert(player);
-    }
 
     void OnDestroy()
     {

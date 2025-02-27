@@ -5,7 +5,7 @@ using UnityEngine;
 public class Credits
 {
     [PrimaryKey, AutoIncrement]
-    public int id { get; }
+    public int id { get; set; }
 
 
     public float amount { get; set; }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class WorkDays
 {
     [PrimaryKey, AutoIncrement]
-    public int id { get; }
+    public int id { get; set; }
 
     public int flowers_sold { get; set; }
     public float money_earned { get; set; }
