@@ -22,6 +22,7 @@ public class DataBaseManager: MonoBehaviour
         //GetFlowersDataToCheck();
         //CreateInitialPopularityPatterns();
         //CreateInitialFlowers();
+        GetFlowersPriceToCheck();
     }
 
 
@@ -63,6 +64,28 @@ public class DataBaseManager: MonoBehaviour
                 var sInT = new PopularityStory { flower_id = f.flower_id, popularity_level = s };
                 _dbConnection.Insert(sInT);
             });
+        });
+    }
+
+    class FlowerIds
+    {
+        public int id { get; set; }
+    }
+
+    private void GetFlowersPriceToCheck()
+    {
+        List<FlowerIds> flowersIds = _dbConnection.Query<FlowerIds>("select flowers.id from flowers");
+
+        flowersIds.ForEach(fId =>
+        {
+            string query = $@"select flowers.name, popularity_story.popularity_level, flowers.popularity_coefficient, flowers.market_price 
+                            from flowers
+                            join popularity_story on popularity_story.flower_id = {fId.id} and 
+                            flowers.id = {fId.id} order by popularity_story.id desc limit 1;";
+
+            var pswf = _dbConnection.Query<PopularityStoryWithFlower>(query).First();
+
+            Debug.Log($"{pswf.name} price = {pswf.market_price * (pswf.popularity_level * pswf.popularity_coefficient / 10)}");
         });
     }
 
