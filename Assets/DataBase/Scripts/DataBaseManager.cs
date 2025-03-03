@@ -131,6 +131,28 @@ public class DataBaseManager: MonoBehaviour
     #endregion
 
 
+
+    #region методы получения данных
+    public List<PopularityStoryWithFlower> GetFlowersPrice()
+    {
+        List<OneColToQuery<int>> flowersIds = _dbConnection.Query<OneColToQuery<int>>("select flowers.id from flowers");
+        List<PopularityStoryWithFlower> storiesList = new();
+
+        flowersIds.ForEach(fId =>
+        {
+            string query = $@"select flowers.name, popularity_story.popularity_level, flowers.popularity_coefficient, flowers.market_price 
+                            from flowers
+                            join popularity_story on popularity_story.flower_id = {fId.colVal} and 
+                            flowers.id = {fId.colVal} order by popularity_story.id desc limit 1;";
+
+            storiesList.Add(_dbConnection.Query<PopularityStoryWithFlower>(query).First());
+        });
+
+
+        return storiesList;
+    }
+    #endregion
+
     void OnDestroy()
     {
         // Закрытие соединения с базой данных

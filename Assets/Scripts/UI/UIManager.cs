@@ -3,6 +3,10 @@ using UnityEngine;
 public class UIManager : MonoBehaviour
 {
     [SerializeField] GameObject shopSettingsPanel;
+    [SerializeField] DataBaseManager dataBaseManager;
+
+    [SerializeField] GameObject flowersListContent;
+    [SerializeField] GameObject flowersListObject;
 
     public void ToggleShopSettingsPanel()
     {
@@ -14,5 +18,16 @@ public class UIManager : MonoBehaviour
         {
             shopSettingsPanel.SetActive(true);
         }
+    }
+
+    private void Awake()
+    {
+       GetFlowersPrices();
+    }
+
+
+    private void GetFlowersPrices()
+    {
+        Instantiate(flowersListObject, flowersListContent.transform);
     }
 }
