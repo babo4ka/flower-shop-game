@@ -324,7 +324,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1346466764}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: ToggleShopSettingsPanel
+        m_MethodName: ToggleMarketPanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -738,10 +738,10 @@ RectTransform:
   - {fileID: 1335576890}
   m_Father: {fileID: 722762908}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 755.0115, y: -33.39601}
+  m_SizeDelta: {x: 503.34097, y: 66.79202}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &397964970
 MonoBehaviour:
@@ -1434,10 +1434,10 @@ RectTransform:
   - {fileID: 1777014796}
   m_Father: {fileID: 722762908}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 251.67049, y: -33.39601}
+  m_SizeDelta: {x: 503.34097, y: 66.79202}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1045637355
 MonoBehaviour:
@@ -1895,6 +1895,7 @@ GameObject:
   - component: {fileID: 1321384189}
   - component: {fileID: 1321384190}
   - component: {fileID: 1321384191}
+  - component: {fileID: 1321384192}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -1961,6 +1962,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!114 &1321384192
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1321384188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57edcec3978ee6c4ebaaeabc740bdd59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1335107308
 GameObject:
   m_ObjectHideFlags: 0
@@ -2218,6 +2231,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shopSettingsPanel: {fileID: 283319520}
+  marketPanel: {fileID: 1629229701}
   dataBaseManager: {fileID: 1346466765}
   flowersListContent: {fileID: 1321384188}
   flowersListObject: {fileID: 2811902003310279723, guid: ce0680499f7378849bfb9784757e489b, type: 3}
@@ -2250,7 +2264,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1629229702
 RectTransform:
   m_ObjectHideFlags: 0

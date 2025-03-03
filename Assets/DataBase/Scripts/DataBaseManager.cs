@@ -22,7 +22,7 @@ public class DataBaseManager: MonoBehaviour
         //GetFlowersDataToCheck();
         //CreateInitialPopularityPatterns();
         //CreateInitialFlowers();
-        GetFlowersPriceToCheck();
+        //GetFlowersPriceToCheck();
     }
 
 
@@ -135,15 +135,18 @@ public class DataBaseManager: MonoBehaviour
     #region методы получения данных
     public List<PopularityStoryWithFlower> GetFlowersPrice()
     {
-        List<OneColToQuery<int>> flowersIds = _dbConnection.Query<OneColToQuery<int>>("select flowers.id from flowers");
+        List<FlowerIds> flowersIds = _dbConnection.Query<FlowerIds>("select flowers.id from flowers");
         List<PopularityStoryWithFlower> storiesList = new();
+
+        Debug.Log($"found: {flowersIds.Count}");
 
         flowersIds.ForEach(fId =>
         {
+            Debug.Log(fId.id);
             string query = $@"select flowers.name, popularity_story.popularity_level, flowers.popularity_coefficient, flowers.market_price 
                             from flowers
-                            join popularity_story on popularity_story.flower_id = {fId.colVal} and 
-                            flowers.id = {fId.colVal} order by popularity_story.id desc limit 1;";
+                            join popularity_story on popularity_story.flower_id = {fId.id} and 
+                            flowers.id = {fId.id} order by popularity_story.id desc limit 1;";
 
             storiesList.Add(_dbConnection.Query<PopularityStoryWithFlower>(query).First());
         });
