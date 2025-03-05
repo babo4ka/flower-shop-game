@@ -67,10 +67,7 @@ public class DataBaseManager: MonoBehaviour
         });
     }
 
-    class FlowerIds
-    {
-        public int id { get; set; }
-    }
+
 
     private void GetFlowersPriceToCheck()
     {
@@ -154,6 +151,16 @@ public class DataBaseManager: MonoBehaviour
 
         return storiesList;
     }
+
+    public List<PopularityStory> GetFlowerPopularityStory(string flowerName)
+    {
+        int flowerId = _dbConnection.Query<FlowerIds>($"select id from flowers where name = \"{flowerName}\"").First().id;
+
+        List<PopularityStory> popularityStories = _dbConnection.Query<PopularityStory>(@$"select id, flower_id, popularity_level
+            from popularity_story where flower_id = {flowerId}");
+
+        return popularityStories;
+    }
     #endregion
 
     void OnDestroy()
@@ -162,4 +169,11 @@ public class DataBaseManager: MonoBehaviour
         _dbConnection?.Close();
     }
 
+
+    #region вспомогательные классы для выборки из бд
+    class FlowerIds
+    {
+        public int id { get; set; }
+    }
+    #endregion
 }
