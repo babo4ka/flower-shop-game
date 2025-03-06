@@ -19,8 +19,12 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject flowersListContent;
     [SerializeField] GameObject flowersListObject;
 
+    //график популярности
+    [SerializeField] GameObject popularityChartPanel;
     [SerializeField] GameObject popularityChart;
     [SerializeField] TMP_Text flowerNameOnChart;
+    [SerializeField] GameObject chartDot;
+    private List<GameObject> chartDots;
 
     #region включение отключение элементов интерфейса
     //метод для переключения панели настроек магазина
@@ -82,8 +86,44 @@ public class UIManager : MonoBehaviour
 
     private void ShowFlowerInfo(string flowerName, List<PopularityStory> popularityStory)
     {
-        if (!popularityChart.activeInHierarchy) popularityChart.SetActive(true);
+        if (!popularityChartPanel.activeInHierarchy) popularityChartPanel.SetActive(true);
+
+        ClearDots();
+        chartDots = new();
+
+
+        RectTransform chartRectTransform = popularityChart.GetComponent<RectTransform>();
+
+        float xPos = chartRectTransform.rect.xMin + 5f;
+        float step = chartRectTransform.rect.width / popularityStory.Count;
+
+        float startY = chartRectTransform.rect.yMin;
+        float height = chartRectTransform.rect.height;
+
+        popularityStory.ForEach(story =>
+        {
+            GameObject dot = Instantiate(chartDot, popularityChart.transform);
+            float yPos = startY + (story.popularity_level / 100 * height);
+            dot.GetComponent<RectTransform>().anchoredPosition = new Vector2(xPos, yPos);
+            xPos += step;
+
+            chartDots.Add(dot);
+        });
+
 
         flowerNameOnChart.text = flowerName;
+
+
+        void ClearDots()
+        {
+            if(chartDots is not  null)
+            {
+                chartDots.ForEach(dot =>
+                {
+                    Destroy(dot);
+                });
+                chartDots.Clear();
+            }  
+        }
     }
 }
