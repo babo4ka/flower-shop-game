@@ -96,7 +96,7 @@ public class UIManager : MonoBehaviour
 
         float xPos = chartRectTransform.rect.xMin + 5f;
         float step = chartRectTransform.rect.width / popularityStory.Count;
-
+        Debug.Log(chartRectTransform.rect.height);
         float startY = chartRectTransform.rect.yMin;
         float height = chartRectTransform.rect.height;
 
