@@ -26,6 +26,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject chartDot;
     private List<GameObject> chartDots;
 
+    //панель покупки цветов
+    [SerializeField] GameObject flowerPriceText;
+    [SerializeField] GameObject openBuyFlowerPanelBtn;
+    [SerializeField] GameObject buyFlowerPanel;
+
     #region включение отключение элементов интерфейса
     //метод для переключения панели настроек магазина
     public void ToggleShopSettingsPanel()
@@ -78,8 +83,54 @@ public class UIManager : MonoBehaviour
             List<PopularityStory> flowerPopularityStory = dataBaseManager.GetFlowerPopularityStory(story.name);
 
 
-            flowerCard.GetComponent<Button>().onClick.AddListener(()=> ShowFlowerInfo(story.name, flowerPopularityStory));
+            flowerCard.GetComponent<Button>().onClick.AddListener(() => {
+                ShowFlowerInfo(story.name, flowerPopularityStory);
+                if (!flowerPriceText.activeInHierarchy) flowerPriceText.SetActive(true);
+                if (!openBuyFlowerPanelBtn.activeInHierarchy) openBuyFlowerPanelBtn.SetActive(true);
+
+                float price = (float)Math.Round(story.market_price * (story.popularity_level * story.popularity_coefficient / 10), 2);
+                flowerPriceText.GetComponent<TMP_Text>().text = $"Цена: {price}";
+                openBuyFlowerPanelBtn.GetComponent<Button>().onClick.RemoveAllListeners();
+                openBuyFlowerPanelBtn.GetComponent<Button>().onClick.AddListener(() => OpenBuyFlowerPanel(story.name, price));
+            });
+            
+            
+          /*  
+            flowerCard.GetComponent<Button>().onClick.AddListener(() =>
+            {
+               
+            });*/
         });
+        
+    }
+
+
+    private void OpenBuyFlowerPanel(string flowerName, float price)
+    {
+        buyFlowerPanel.SetActive(true);
+        buyFlowerPanel.transform.Find("CloseBtn").GetComponent<Button>().onClick.AddListener(() => { buyFlowerPanel.SetActive(false); });
+
+        buyFlowerPanel.transform.Find("FlowerNameTxt").GetComponent<TMP_Text>().text = flowerName;
+        buyFlowerPanel.transform.Find("PriceTxt").GetComponent<TMP_Text>().text = $"Цена: {price}";
+
+        buyFlowerPanel.transform.Find("CountInput").GetComponent<TMP_InputField>().onValueChanged.RemoveAllListeners();
+        buyFlowerPanel.transform.Find("BuyBtn").GetComponent<Button>().onClick.RemoveAllListeners();
+
+        buyFlowerPanel.transform.Find("CountInput").GetComponent<TMP_InputField>().onValueChanged.AddListener((input) => {
+            int count = int.Parse(input);
+            float sum = (float)Math.Round(price * count, 2);
+            buyFlowerPanel.transform.Find("SumTxt").GetComponent<TMP_Text>().text = $"Сумма: {sum}";
+
+            buyFlowerPanel.transform.Find("BuyBtn").GetComponent<Button>().onClick.AddListener(() =>
+            {
+                Debug.Log($"Here {flowerName}");
+                //сделать проверку на наличие денег
+                bool bought = dataBaseManager.BuyFlower(flowerName, count, price);
+                Debug.Log(bought);
+            });
+        });
+
+
         
     }
 
@@ -96,7 +147,6 @@ public class UIManager : MonoBehaviour
 
         float xPos = chartRectTransform.rect.xMin + 5f;
         float step = chartRectTransform.rect.width / popularityStory.Count;
-        Debug.Log(chartRectTransform.rect.height);
         float startY = chartRectTransform.rect.yMin;
         float height = chartRectTransform.rect.height;
 
@@ -126,4 +176,6 @@ public class UIManager : MonoBehaviour
             }  
         }
     }
+
+
 }

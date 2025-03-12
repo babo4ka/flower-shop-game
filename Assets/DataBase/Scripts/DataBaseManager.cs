@@ -163,6 +163,39 @@ public class DataBaseManager: MonoBehaviour
     }
     #endregion
 
+
+    #region методы изменения данных
+    
+    public bool BuyFlower(string flowerName, int count, float marketPrice)
+    {
+        int flowerId = _dbConnection.Query<FlowerIds>($"select flowers.id from flowers where flowers.name = \"{flowerName}\"").First().id;
+
+        string getFlowerInfoQuery = $"select * from shop_flowers where flower_id = {flowerId}";
+
+        List<ShopFlowers> shopFlowers = _dbConnection.Query<ShopFlowers>(getFlowerInfoQuery);
+
+        Debug.Log($"flower id = {flowerId} flower name = {flowerName}");
+
+        if (shopFlowers.Count == 0)
+        {
+            string query = @$"insert into shop_flowers (count_in_stock, count_on_sale, flower_id, price) 
+                            values ({count}, 0, {flowerId}, 0)";
+
+            var newVal = new ShopFlowers { count_in_stock = count, count_on_sale = 0, flower_id = flowerId, price = 0};
+
+            _dbConnection.Insert(newVal);
+            return true;
+        }
+        else
+        {
+            int newCount = shopFlowers[0].count_in_stock + count;
+            string query = $@"update shop_flowers set count_in_stock = {newCount} where flower_id = {flowerId}";
+            _dbConnection.Execute(query);
+            return true;
+        };
+    }
+    #endregion
+
     void OnDestroy()
     {
         // Закрытие соединения с базой данных
