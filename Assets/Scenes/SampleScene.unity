@@ -5640,6 +5640,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20e8278fb71e1464eaeab976d5368468, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cashTxt: {fileID: 2017451718}
   shopSettingsPanel: {fileID: 283319520}
   marketPanel: {fileID: 1629229701}
   dataBaseManager: {fileID: 1346466765}
@@ -8136,7 +8137,7 @@ GameObject:
   - component: {fileID: 2017451719}
   - component: {fileID: 2017451718}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: CashTxt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

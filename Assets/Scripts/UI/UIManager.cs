@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -8,11 +9,22 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    //основные панели
+    #region внутренние переменные
+    //сущность магазина
+    private Shop shop;
+    //список точек попул€рности
+    private List<GameObject> chartDots;
+    #endregion
+
+    #region переменные из редактора
+    //панель с отображением денег
+    [SerializeField] TMP_Text cashTxt;
+
+    //основные панели дл€ взаимодействи€ с магазином
     [SerializeField] GameObject shopSettingsPanel;
     [SerializeField] GameObject marketPanel;
 
-    //база данных
+    //менеджер базы данных
     [SerializeField] DataBaseManager dataBaseManager;
 
     //панели дл€ рынка с цветами
@@ -20,16 +32,24 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject flowersListObject;
 
     //график попул€рности
+    //панель дл€ графика
     [SerializeField] GameObject popularityChartPanel;
+    //график попул€рности
     [SerializeField] GameObject popularityChart;
+    //название цветка на графике
     [SerializeField] TMP_Text flowerNameOnChart;
+    //префаб точки дл€ графика
     [SerializeField] GameObject chartDot;
-    private List<GameObject> chartDots;
+    
 
     //панель покупки цветов
+    //название цветка
     [SerializeField] GameObject flowerPriceText;
+    //кнопка дл€ открыти€ панели дл€ покупки цветов
     [SerializeField] GameObject openBuyFlowerPanelBtn;
+    //панель с интерфейсом дл€ покупки цветов
     [SerializeField] GameObject buyFlowerPanel;
+    #endregion
 
     #region включение отключение элементов интерфейса
     //метод дл€ переключени€ панели настроек магазина
@@ -63,9 +83,11 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
+        dataBaseManager.usi += UpdateShopData;
         flowersListContent.GetComponent<OnEnableEvent>().enabled += GetFlowersPrices;
     }
 
+    #region методы дл€ отображени€ и изменени€ информации о цветах
     //метод дл€ отображени€ списка цветков на рынке
     private void GetFlowersPrices()
     {
@@ -98,7 +120,7 @@ public class UIManager : MonoBehaviour
         
     }
 
-
+    //метод дл€ отображени€ панели интерфейса д€л покупки цветов и прив€зки к кнопкам метода покупки цветов
     private void OpenBuyFlowerPanel(string flowerName, float price)
     {
         buyFlowerPanel.SetActive(true);
@@ -123,12 +145,9 @@ public class UIManager : MonoBehaviour
                 Debug.Log(bought);
             });
         });
-
-
-        
     }
 
-
+    //метод дл€ отображени€ информации о цветке и его графика попул€рности
     private void ShowFlowerInfo(string flowerName, List<PopularityStory> popularityStory)
     {
         if (!popularityChartPanel.activeInHierarchy) popularityChartPanel.SetActive(true);
@@ -170,6 +189,12 @@ public class UIManager : MonoBehaviour
             }  
         }
     }
+    #endregion
 
+    private void UpdateShopData(Shop shop)
+    {
+        this.shop = shop;
+        cashTxt.text = $"{shop.cash} $";
+    }
 
 }

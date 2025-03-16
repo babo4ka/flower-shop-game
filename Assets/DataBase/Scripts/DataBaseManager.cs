@@ -8,7 +8,13 @@ using System.Globalization;
 
 public class DataBaseManager: MonoBehaviour
 {
+
+    public delegate void UpdateShopInfo(Shop shop);
+    public UpdateShopInfo usi;
+
     private SQLiteConnection _dbConnection;
+
+    public static bool loaded { get; private set; } = false;
 
     void Start()
     {
@@ -17,8 +23,13 @@ public class DataBaseManager: MonoBehaviour
 
         // Создание подключения к базе данных
         _dbConnection = new SQLiteConnection(databasePath);
+        loaded = true;
+
 
         CreateDataBase();
+
+        UpdateShopData();
+        //CreateInitialShopData();
         //GetFlowersDataToCheck();
         //CreateInitialPopularityPatterns();
         //CreateInitialFlowers();
@@ -129,6 +140,15 @@ public class DataBaseManager: MonoBehaviour
             _dbConnection.Insert(f);
         }
     }
+
+    //создание записи в сущности shop
+    private void CreateInitialShopData()
+    {
+        var shop = new Shop() { cash = 500000f, debt = 0f, rating = 1};
+
+        _dbConnection.Insert(shop);
+
+    }
     #endregion
 
 
@@ -139,17 +159,12 @@ public class DataBaseManager: MonoBehaviour
         List<FlowerNames> names = _dbConnection.Query<FlowerNames>("select flowers.name as flower_name from flowers");
         List<PopularityStoryWithFlower> storiesList = new();
 
-        Debug.Log($"found: {names.Count}");
-
         names.ForEach(name =>
         {
-            Debug.Log(name.flower_name);
             string query = $@"select flowers.name as flower_name, popularity_story.popularity_level, flowers.popularity_coefficient, flowers.market_price 
                             from flowers
                             join popularity_story on popularity_story.flower_name = ""{name.flower_name}"" and 
                             flowers.name = ""{name.flower_name}"" order by popularity_story.id desc limit 1;";
-
-            Debug.Log(query);
 
             storiesList.Add(_dbConnection.Query<PopularityStoryWithFlower>(query).First());
         });
@@ -164,6 +179,12 @@ public class DataBaseManager: MonoBehaviour
             from popularity_story where flower_name = ""{flowerName}""");
 
         return popularityStories;
+    }
+
+
+    private void UpdateShopData()
+    {
+        usi?.Invoke(_dbConnection.Query<Shop>("select * from shop").First());
     }
     #endregion
 
