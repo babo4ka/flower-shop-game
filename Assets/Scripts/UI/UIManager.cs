@@ -77,29 +77,23 @@ public class UIManager : MonoBehaviour
             TMP_Text flowerNameTxt = flowerCard.transform.Find("FlowerNameTxt").GetComponent<TMP_Text>();
             TMP_Text flowerPriceTxt = flowerCard.transform.Find("FlowerPriceTxt").GetComponent<TMP_Text>();
 
-            flowerNameTxt.text = story.name;
+            flowerNameTxt.text = story.flower_name;
             flowerPriceTxt.text = $"{(float)Math.Round(story.market_price * story.popularity_level * story.popularity_coefficient / 10, 2)}";
 
-            List<PopularityStory> flowerPopularityStory = dataBaseManager.GetFlowerPopularityStory(story.name);
+            List<PopularityStory> flowerPopularityStory = dataBaseManager.GetFlowerPopularityStory(story.flower_name);
 
 
             flowerCard.GetComponent<Button>().onClick.AddListener(() => {
-                ShowFlowerInfo(story.name, flowerPopularityStory);
+                ShowFlowerInfo(story.flower_name, flowerPopularityStory);
                 if (!flowerPriceText.activeInHierarchy) flowerPriceText.SetActive(true);
                 if (!openBuyFlowerPanelBtn.activeInHierarchy) openBuyFlowerPanelBtn.SetActive(true);
 
                 float price = (float)Math.Round(story.market_price * (story.popularity_level * story.popularity_coefficient / 10), 2);
                 flowerPriceText.GetComponent<TMP_Text>().text = $"Цена: {price}";
                 openBuyFlowerPanelBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-                openBuyFlowerPanelBtn.GetComponent<Button>().onClick.AddListener(() => OpenBuyFlowerPanel(story.name, price));
+                openBuyFlowerPanelBtn.GetComponent<Button>().onClick.AddListener(() => OpenBuyFlowerPanel(story.flower_name, price));
             });
             
-            
-          /*  
-            flowerCard.GetComponent<Button>().onClick.AddListener(() =>
-            {
-               
-            });*/
         });
         
     }

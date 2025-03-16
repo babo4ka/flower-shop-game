@@ -4,9 +4,7 @@ using UnityEngine;
 [Table("flowers")]
 public class Flowers
 {
-    [PrimaryKey, AutoIncrement]
-    public int id { get; set; }
-
+    [PrimaryKey]
     public string name { get; set; }
 
     //внешний ключ к таблице popularity_patterns

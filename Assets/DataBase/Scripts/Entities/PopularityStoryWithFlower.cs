@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PopularityStoryWithFlower
 {   
-    public string name { get; set; }
+    public string flower_name { get; set; }
 
     private float _popularity_level;
 

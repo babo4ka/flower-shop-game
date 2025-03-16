@@ -12,7 +12,7 @@ public class ShopFlowers
     public int count_on_sale { get; set; }
 
     //внешний ключ к таблице flowers
-    public int flower_id { get; set; }
+    public string flower_name { get; set; }
 
     public float price { get; set; }
 }

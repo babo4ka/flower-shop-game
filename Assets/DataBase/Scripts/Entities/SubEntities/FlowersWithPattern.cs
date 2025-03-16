@@ -2,9 +2,7 @@ using UnityEngine;
 
 public class FlowersWithPattern
 {
-    public int flower_id {  get; set; }
-
-    public string name { get; set; }
+    public string flower_name {  get; set; }
 
     public string popularity_pattern { get; set; }
 
