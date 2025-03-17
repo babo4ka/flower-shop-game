@@ -28,8 +28,8 @@ public class DataBaseManager: MonoBehaviour
 
         CreateDataBase();
 
-        UpdateShopData();
         //CreateInitialShopData();
+        UpdateShopData();
         //GetFlowersDataToCheck();
         //CreateInitialPopularityPatterns();
         //CreateInitialFlowers();
@@ -144,10 +144,9 @@ public class DataBaseManager: MonoBehaviour
     //создание записи в сущности shop
     private void CreateInitialShopData()
     {
-        var shop = new Shop() { cash = 500000f, debt = 0f, rating = 1};
+        var shop = new Shop() { cash = 500000f, daysGone = 0, debt = 0f, rating = 1};
 
         _dbConnection.Insert(shop);
-
     }
     #endregion
 
@@ -191,9 +190,9 @@ public class DataBaseManager: MonoBehaviour
 
     #region методы изменения данных
     
-    public bool BuyFlower(string flowerName, int count, float marketPrice)
+    public void BuyFlower(string flowerName, int count, float sum)
     {
-        string getFlowerInforQuery = $"select * from shop_flowers where flower_name = {flowerName}";
+        string getFlowerInforQuery = $"select * from shop_flowers where flower_name = \"{flowerName}\"";
 
         List<ShopFlowers> shopFlowers = _dbConnection.Query<ShopFlowers>(getFlowerInforQuery);
 
@@ -201,21 +200,22 @@ public class DataBaseManager: MonoBehaviour
 
         if (shopFlowers.Count == 0)
         {
-            string query = @$"insert into shop_flowers (count_in_stock, count_on_sale, flower_name, price) 
-                            values ({count}, 0, {flowerName}, 0)";
-
-            var newVal = new ShopFlowers { count_in_stock = count, count_on_sale = 0, flower_name = flowerName, price = 0};
-
+            var newVal = new ShopFlowers() { count_in_stock = count, count_on_sale = 0, flower_name = flowerName, price = 0f};
             _dbConnection.Insert(newVal);
-            return true;
         }
         else
         {
-            int newCount = shopFlowers[0].count_in_stock + count;
-            string query = $@"update shop_flowers set count_in_stock = {newCount} where flower_name = {flowerName}";
-            _dbConnection.Execute(query);
-            return true;
+            shopFlowers[0].count_in_stock += count;
+            _dbConnection.Update(shopFlowers[0]);
         };
+
+        Shop shop = _dbConnection.Query<Shop>("select * from shop").First();
+        shop.cash -= sum;
+
+        _dbConnection.Update(shop);
+
+        usi?.Invoke(shop);
+
     }
     #endregion
 

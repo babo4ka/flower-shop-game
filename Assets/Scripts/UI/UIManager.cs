@@ -19,6 +19,7 @@ public class UIManager : MonoBehaviour
     #region переменные из редактора
     //панель с отображением денег
     [SerializeField] TMP_Text cashTxt;
+    [SerializeField] TMP_Text daysTxt;
 
     //основные панели дл€ взаимодействи€ с магазином
     [SerializeField] GameObject shopSettingsPanel;
@@ -28,7 +29,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] DataBaseManager dataBaseManager;
 
     //панели дл€ рынка с цветами
-    [SerializeField] GameObject flowersListContent;
+    [SerializeField] GameObject flowersListOnMarketContent;
     [SerializeField] GameObject flowersListObject;
 
     //график попул€рности
@@ -84,7 +85,7 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         dataBaseManager.usi += UpdateShopData;
-        flowersListContent.GetComponent<OnEnableEvent>().enabled += GetFlowersPrices;
+        flowersListOnMarketContent.GetComponent<OnEnableEvent>().enabled += GetFlowersPrices;
     }
 
     #region методы дл€ отображени€ и изменени€ информации о цветах
@@ -95,7 +96,7 @@ public class UIManager : MonoBehaviour
 
         stories.ForEach(story =>
         {
-            GameObject flowerCard = Instantiate(flowersListObject, flowersListContent.transform);
+            GameObject flowerCard = Instantiate(flowersListObject, flowersListOnMarketContent.transform);
             TMP_Text flowerNameTxt = flowerCard.transform.Find("FlowerNameTxt").GetComponent<TMP_Text>();
             TMP_Text flowerPriceTxt = flowerCard.transform.Find("FlowerPriceTxt").GetComponent<TMP_Text>();
 
@@ -137,12 +138,16 @@ public class UIManager : MonoBehaviour
             float sum = (float)Math.Round(price * count, 2);
             buyFlowerPanel.transform.Find("SumTxt").GetComponent<TMP_Text>().text = $"—умма: {sum}";
 
+            //прив€зка к кнопке покепки цветов
             buyFlowerPanel.transform.Find("BuyBtn").GetComponent<Button>().onClick.AddListener(() =>
             {
                 Debug.Log($"Here {flowerName}");
-                //сделать проверку на наличие денег
-                bool bought = dataBaseManager.BuyFlower(flowerName, count, price);
-                Debug.Log(bought);
+                if(shop.cash >= sum)
+                {
+                    dataBaseManager.BuyFlower(flowerName, count, price);
+                    buyFlowerPanel.SetActive(false);
+                }
+                
             });
         });
     }
@@ -195,6 +200,7 @@ public class UIManager : MonoBehaviour
     {
         this.shop = shop;
         cashTxt.text = $"{shop.cash} $";
+        daysTxt.text = $"ƒней прошло: {shop.daysGone}";
     }
 
 }

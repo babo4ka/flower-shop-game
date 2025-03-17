@@ -9,5 +9,7 @@ public class Shop
 
     public float cash { get; set;}
     public float debt { get; set;}
+
+    public int daysGone { get; set;}
     public int rating { get; set;}
 }
