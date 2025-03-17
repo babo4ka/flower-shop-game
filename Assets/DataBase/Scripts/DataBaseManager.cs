@@ -180,6 +180,11 @@ public class DataBaseManager: MonoBehaviour
         return popularityStories;
     }
 
+    public List<ShopFlowers> GetShopFlowersData()
+    {
+        string query = $"select * from shop_flowers";
+        return _dbConnection.Query<ShopFlowers>(query);
+    }
 
     private void UpdateShopData()
     {
@@ -216,6 +221,15 @@ public class DataBaseManager: MonoBehaviour
 
         usi?.Invoke(shop);
 
+    }
+
+    public void ChangeFlowerPrice(string flowerName, float price)
+    {
+        ShopFlowers flower = _dbConnection.Query<ShopFlowers>($"select * from shop_flowers where flower_name = \"{flowerName}\"").First();
+
+        flower.price = price;
+
+        _dbConnection.Update(flower);
     }
     #endregion
 

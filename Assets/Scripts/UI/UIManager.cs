@@ -27,6 +27,8 @@ public class UIManager : MonoBehaviour
 
     //менеджер базы данных
     [SerializeField] DataBaseManager dataBaseManager;
+    //менеджер для работы с цветами
+    [SerializeField] FlowersManager flowersManager;
 
     //панели для рынка с цветами
     [SerializeField] GameObject flowersListOnMarketContent;
@@ -50,6 +52,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject openBuyFlowerPanelBtn;
     //панель с интерфейсом для покупки цветов
     [SerializeField] GameObject buyFlowerPanel;
+
+    //панель цветка в магазине
+    [SerializeField] Button changePriceBtn;
+    [SerializeField] Button deleteFromSaleBtn;
+    [SerializeField] Button putOnSaleBtn;
     #endregion
 
     #region включение отключение элементов интерфейса
@@ -138,14 +145,15 @@ public class UIManager : MonoBehaviour
             float sum = (float)Math.Round(price * count, 2);
             buyFlowerPanel.transform.Find("SumTxt").GetComponent<TMP_Text>().text = $"Сумма: {sum}";
 
-            //привязка к кнопке покепки цветов
+            //привязка к кнопке покупки цветов
             buyFlowerPanel.transform.Find("BuyBtn").GetComponent<Button>().onClick.AddListener(() =>
             {
-                Debug.Log($"Here {flowerName}");
-                if(shop.cash >= sum)
+                bool bought = flowersManager.BuyFlower(flowerName, count, price);
+                if (bought)
                 {
-                    dataBaseManager.BuyFlower(flowerName, count, price);
-                    buyFlowerPanel.SetActive(false);
+                }
+                else
+                {
                 }
                 
             });
@@ -193,6 +201,15 @@ public class UIManager : MonoBehaviour
                 chartDots.Clear();
             }  
         }
+    }
+
+
+
+    private void GetShopsFlowersList()
+    {
+        List<ShopFlowers> flowers = dataBaseManager.GetShopFlowersData();
+
+
     }
     #endregion
 
