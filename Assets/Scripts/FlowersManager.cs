@@ -9,7 +9,7 @@ public class FlowersManager : MonoBehaviour
 
     private void Awake()
     {
-        dataBaseManager.usi += UpdateShopInfo;
+        dataBaseManager.updateShopData += UpdateShopInfo;
     }
 
     public void ChangeFlowerPrice(string flowerName, float price)

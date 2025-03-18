@@ -91,7 +91,7 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-        dataBaseManager.usi += UpdateShopData;
+        dataBaseManager.updateShopData += UpdateShopData;
         flowersListOnMarketContent.GetComponent<OnEnableEvent>().enabled += GetFlowersPrices;
     }
 

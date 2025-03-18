@@ -28,5 +28,10 @@ public class PopularityStoryWithFlower
         get { return _market_price; }
         set { _market_price = (float)Math.Round(value, 2); }
     }
+
+    public float FlowerPrice()
+    {
+        return (float)Math.Round(market_price * popularity_level * popularity_coefficient / 10, 2);
+    }
 }
 

@@ -9,8 +9,14 @@ using System.Globalization;
 public class DataBaseManager: MonoBehaviour
 {
 
-    public delegate void UpdateShopInfo(Shop shop);
-    public UpdateShopInfo usi;
+    public delegate void UpdateShopData(Shop shop);
+    public UpdateShopData updateShopData;
+
+    public delegate void UpdateFlowersPricesData(List<PopularityStoryWithFlower> stories);
+    public UpdateFlowersPricesData updateFlowersPricesData;
+
+    public delegate void UpdateShopFlowersData(List<ShopFlowers> shopFlowers);
+    public UpdateShopFlowersData updateShopFlowersData;
 
     private SQLiteConnection _dbConnection;
 
@@ -29,7 +35,7 @@ public class DataBaseManager: MonoBehaviour
         CreateDataBase();
 
         //CreateInitialShopData();
-        UpdateShopData();
+        GetShopData();
         //GetFlowersDataToCheck();
         //CreateInitialPopularityPatterns();
         //CreateInitialFlowers();
@@ -168,7 +174,7 @@ public class DataBaseManager: MonoBehaviour
             storiesList.Add(_dbConnection.Query<PopularityStoryWithFlower>(query).First());
         });
 
-
+        updateFlowersPricesData?.Invoke(storiesList);
         return storiesList;
     }
 
@@ -182,13 +188,14 @@ public class DataBaseManager: MonoBehaviour
 
     public List<ShopFlowers> GetShopFlowersData()
     {
-        string query = $"select * from shop_flowers";
-        return _dbConnection.Query<ShopFlowers>(query);
+        List<ShopFlowers> shopFlowers = _dbConnection.Query<ShopFlowers>("select * from shop_flowers");
+        updateShopFlowersData?.Invoke(shopFlowers);
+        return _dbConnection.Query<ShopFlowers>("select * from shop_flowers");
     }
 
-    private void UpdateShopData()
+    private void GetShopData()
     {
-        usi?.Invoke(_dbConnection.Query<Shop>("select * from shop").First());
+        updateShopData?.Invoke(_dbConnection.Query<Shop>("select * from shop").First());
     }
     #endregion
 
@@ -219,7 +226,7 @@ public class DataBaseManager: MonoBehaviour
 
         _dbConnection.Update(shop);
 
-        usi?.Invoke(shop);
+        updateShopData?.Invoke(shop);
 
     }
 
