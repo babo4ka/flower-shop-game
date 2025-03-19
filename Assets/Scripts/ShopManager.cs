@@ -1,16 +1,34 @@
+using System;
 using UnityEngine;
 
 public class ShopManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public static Action<Shop> sendUpdatedShopInfo;
+
+    //сущность магазина
+    private Shop shop;
+
+    private void Awake()
     {
-        
+        DataBaseManager.updateShopData += UpdateShopData;
     }
 
-    // Update is called once per frame
-    void Update()
+
+    #region методы получения информации от базы данных
+    //обновление данных магазина
+    private void UpdateShopData(Shop shop)
     {
-        
+        this.shop = shop;
+        sendUpdatedShopInfo?.Invoke(shop);
     }
+    #endregion
+
+
+    #region методы запросов к менеджеру данных магазина
+    public bool IsCashEnough(float sum)
+    {
+        return sum <= shop.cash;
+    }
+
+    #endregion
 }

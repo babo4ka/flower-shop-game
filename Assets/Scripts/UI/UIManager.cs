@@ -10,8 +10,6 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     #region внутренние переменные
-    //сущность магазина
-    private Shop shop;
     //список точек популярности
     private List<GameObject> chartDots;
     #endregion
@@ -32,7 +30,13 @@ public class UIManager : MonoBehaviour
 
     //панели для рынка с цветами
     [SerializeField] GameObject flowersListOnMarketContent;
-    [SerializeField] GameObject flowersListObject;
+    [SerializeField] GameObject flowersListOnMarketObject;
+    List<GameObject> flowersOnMarketCards;
+
+    //панели для цветов в магазине
+    [SerializeField] GameObject flowersListOnShopContent;
+    [SerializeField] GameObject flowersListOnShopObject;
+    List<GameObject> flowersOnShopCards;
 
     //график популярности
     //панель для графика
@@ -46,7 +50,7 @@ public class UIManager : MonoBehaviour
     
 
     //панель покупки цветов
-    //название цветка
+    //цена цветка
     [SerializeField] GameObject flowerPriceText;
     //кнопка для открытия панели для покупки цветов
     [SerializeField] GameObject openBuyFlowerPanelBtn;
@@ -54,9 +58,19 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject buyFlowerPanel;
 
     //панель цветка в магазине
-    [SerializeField] Button changePriceBtn;
-    [SerializeField] Button deleteFromSaleBtn;
-    [SerializeField] Button putOnSaleBtn;
+    //кнопки для изменения данных цветка
+    [SerializeField] Button changeFlowerPriceBtn;
+    [SerializeField] Button deleteFlowerFromSaleBtn;
+    [SerializeField] Button putFlowerOnSaleBtn;
+
+    //отображение информации о цветках
+    [SerializeField] TMP_Text flowerNameOnShopTxt;
+    [SerializeField] TMP_Text flowerOnShopPriceTxt;
+    [SerializeField] TMP_Text countFlowersOnSaleTxt;
+    [SerializeField] TMP_Text countFlowersInStockTxt;
+    //поля для внесения изменений в инфомрацию о цветах
+    [SerializeField] TMP_InputField changeFlowerPriceInput;
+    [SerializeField] TMP_InputField toggleFlowersOnSaleInput;
     #endregion
 
     #region включение отключение элементов интерфейса
@@ -91,26 +105,30 @@ public class UIManager : MonoBehaviour
 
     private void Awake()
     {
-        dataBaseManager.updateShopData += UpdateShopData;
+        ShopManager.sendUpdatedShopInfo += GetUpdatedShopInfo;
         flowersListOnMarketContent.GetComponent<OnEnableEvent>().enabled += GetFlowersPrices;
+        flowersListOnShopContent.GetComponent<OnEnableEvent>().enabled += GetShopsFlowersList;
     }
 
     #region методы для отображения и изменения информации о цветах
     //метод для отображения списка цветков на рынке
     private void GetFlowersPrices()
     {
-        List<PopularityStoryWithFlower> stories = dataBaseManager.GetFlowersPrice();
+        List<FlowersPrice> stories = flowersManager.GetFlowersPrice();
+        RemoveFlowerOnMarketCards();
+        flowersOnMarketCards = new();
 
         stories.ForEach(story =>
         {
-            GameObject flowerCard = Instantiate(flowersListObject, flowersListOnMarketContent.transform);
+            GameObject flowerCard = Instantiate(flowersListOnMarketObject, flowersListOnMarketContent.transform);
+            flowersOnMarketCards.Add(flowerCard);
             TMP_Text flowerNameTxt = flowerCard.transform.Find("FlowerNameTxt").GetComponent<TMP_Text>();
             TMP_Text flowerPriceTxt = flowerCard.transform.Find("FlowerPriceTxt").GetComponent<TMP_Text>();
 
             flowerNameTxt.text = story.flower_name;
             flowerPriceTxt.text = $"{(float)Math.Round(story.market_price * story.popularity_level * story.popularity_coefficient / 10, 2)}";
 
-            List<PopularityStory> flowerPopularityStory = dataBaseManager.GetFlowerPopularityStory(story.flower_name);
+            List<PopularityStory> flowerPopularityStory = flowersManager.GetFlowerPopularityStory(story.flower_name);
 
 
             flowerCard.GetComponent<Button>().onClick.AddListener(() => {
@@ -125,10 +143,25 @@ public class UIManager : MonoBehaviour
             });
             
         });
-        
+
+
+        void RemoveFlowerOnMarketCards()
+        {
+            if(flowersOnMarketCards is not null)
+            {
+                flowersOnMarketCards.ForEach(card =>
+                {
+                    Destroy(card);
+                });
+
+                flowersOnMarketCards.Clear();
+            }
+        }
     }
 
-    //метод для отображения панели интерфейса дял покупки цветов и привязки к кнопкам метода покупки цветов
+    
+
+    //метод для отображения панели интерфейса для покупки цветов и привязки к кнопкам метода покупки цветов
     private void OpenBuyFlowerPanel(string flowerName, float price)
     {
         buyFlowerPanel.SetActive(true);
@@ -207,17 +240,81 @@ public class UIManager : MonoBehaviour
 
     private void GetShopsFlowersList()
     {
-        List<ShopFlowers> flowers = dataBaseManager.GetShopFlowersData();
+        List<ShopFlowers> flowers = flowersManager.GetShopFlowers();
+        RemoveShopFlowerCards();
+        flowersOnShopCards = new();
+        flowers.ForEach(flower =>
+        {
+            GameObject flowerCard = Instantiate(flowersListOnShopObject, flowersListOnShopContent.transform);
+            flowersOnShopCards.Add(flowerCard);
+            TMP_Text flowerNameTxt = flowerCard.transform.Find("FlowerNameTxt").GetComponent<TMP_Text>();
+            TMP_Text flowerPriceTxt = flowerCard.transform.Find("FlowerPriceTxt").GetComponent<TMP_Text>();
+
+            flowerNameTxt.text = flower.flower_name;
+            flowerPriceTxt.text = $"{flower.price}";
+
+            List<PopularityStory> flowerPopularityStory = flowersManager.GetFlowerPopularityStory(flower.flower_name);
 
 
+            flowerCard.GetComponent<Button>().onClick.AddListener(() => {
+                flowerNameOnShopTxt.text = flower.flower_name;
+                countFlowersOnSaleTxt.text = $"Количество в продаже: {flower.count_on_sale}";
+                countFlowersInStockTxt.text = $"Количество на складе: {flower.count_in_stock}";
+
+                changeFlowerPriceInput.onValueChanged.RemoveAllListeners();
+                changeFlowerPriceInput.onValueChanged.AddListener(value =>
+                {
+                    changeFlowerPriceBtn.onClick.RemoveAllListeners();
+                    changeFlowerPriceBtn.onClick.AddListener(() =>
+                    {
+                        flowersManager.ChangeFlowerPrice(flower.flower_name, float.Parse(value));
+                    });
+                });
+
+                toggleFlowersOnSaleInput.onValueChanged.RemoveAllListeners();
+                toggleFlowersOnSaleInput.onValueChanged.AddListener(value =>
+                {
+                    deleteFlowerFromSaleBtn.onClick.RemoveAllListeners();
+                    putFlowerOnSaleBtn.onClick.RemoveAllListeners();
+
+                    deleteFlowerFromSaleBtn.onClick.AddListener(() =>
+                    {
+                        flowersManager.ToggleSaleFlowers(flower.flower_name, int.Parse(value), DataBaseManager.ToggleSaleAction.REMOVE);
+                    });
+
+                    putFlowerOnSaleBtn.onClick.AddListener(() =>
+                    {
+                        flowersManager.ToggleSaleFlowers(flower.flower_name, int.Parse(value), DataBaseManager.ToggleSaleAction.PUT);
+                    });
+                });
+            });
+
+        });
+
+        void RemoveShopFlowerCards()
+        {
+            if(flowersOnShopCards is not null)
+            {
+                flowersOnShopCards.ForEach(card =>
+                {
+                    Destroy(card);
+                });
+
+                flowersOnShopCards.Clear();
+            }
+        }
     }
+
+    
     #endregion
 
-    private void UpdateShopData(Shop shop)
+
+    #region методы для отображения информации магазина
+    private void GetUpdatedShopInfo(Shop shop)
     {
-        this.shop = shop;
         cashTxt.text = $"{shop.cash} $";
         daysTxt.text = $"Дней прошло: {shop.daysGone}";
     }
+    #endregion
 
 }

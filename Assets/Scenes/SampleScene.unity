@@ -8652,6 +8652,7 @@ GameObject:
   - component: {fileID: 1346466764}
   - component: {fileID: 1346466765}
   - component: {fileID: 1346466766}
+  - component: {fileID: 1346466767}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -8693,7 +8694,9 @@ MonoBehaviour:
   dataBaseManager: {fileID: 1346466765}
   flowersManager: {fileID: 1346466766}
   flowersListOnMarketContent: {fileID: 1321384188}
-  flowersListObject: {fileID: 2811902003310279723, guid: ce0680499f7378849bfb9784757e489b, type: 3}
+  flowersListOnMarketObject: {fileID: 2811902003310279723, guid: ce0680499f7378849bfb9784757e489b, type: 3}
+  flowersListOnShopContent: {fileID: 2105947820}
+  flowersListOnShopObject: {fileID: 2811902003310279723, guid: 74efb0ee6b2d554439a5722ba5b293c1, type: 3}
   popularityChartPanel: {fileID: 577496375}
   popularityChart: {fileID: 1481115905}
   flowerNameOnChart: {fileID: 1877746110}
@@ -8701,9 +8704,15 @@ MonoBehaviour:
   flowerPriceText: {fileID: 816471927}
   openBuyFlowerPanelBtn: {fileID: 1863141687}
   buyFlowerPanel: {fileID: 1096823350}
-  changePriceBtn: {fileID: 997786486}
-  deleteFromSaleBtn: {fileID: 228384671}
-  putOnSaleBtn: {fileID: 1523977464}
+  changeFlowerPriceBtn: {fileID: 997786486}
+  deleteFlowerFromSaleBtn: {fileID: 228384671}
+  putFlowerOnSaleBtn: {fileID: 1523977464}
+  flowerNameOnShopTxt: {fileID: 170452082}
+  flowerOnShopPriceTxt: {fileID: 394999512}
+  countFlowersOnSaleTxt: {fileID: 2033789570}
+  countFlowersInStockTxt: {fileID: 1499061750}
+  changeFlowerPriceInput: {fileID: 778156266}
+  toggleFlowersOnSaleInput: {fileID: 1222889166}
 --- !u!114 &1346466765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8729,6 +8738,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dataBaseManager: {fileID: 1346466765}
+  shopManager: {fileID: 1346466767}
+--- !u!114 &1346466767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1346466762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57d47ec10eae6d748aa74615307f4e06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1408927309
 GameObject:
   m_ObjectHideFlags: 0
