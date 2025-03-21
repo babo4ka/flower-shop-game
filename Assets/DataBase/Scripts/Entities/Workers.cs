@@ -9,5 +9,9 @@ public class Workers
 
     public string name { get; set; }
 
-    public int motivation { get; set; }
+    public float motivation { get; set; }
+
+    public int minimal_shop_rating {  get; set; }
+
+    public float minimal_hour_salary { get; set; }
 }

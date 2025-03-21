@@ -30,5 +30,10 @@ public class ShopManager : MonoBehaviour
         return sum <= shop.cash;
     }
 
+    public int CurrentRating()
+    {
+        return shop.rating;
+    }
+
     #endregion
 }
