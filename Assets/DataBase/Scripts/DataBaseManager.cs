@@ -25,7 +25,7 @@ public class DataBaseManager : MonoBehaviour
 
         // Создание подключения к базе данных
         _dbConnection = new SQLiteConnection(databasePath);
-        loaded = true;
+        
 
 
         CreateDataBase();
@@ -38,6 +38,7 @@ public class DataBaseManager : MonoBehaviour
         //CreateInitialPopularityPatterns();
         //CreateInitialFlowers();
         //GetFlowersPriceToCheck();
+        loaded = true;
     }
 
 

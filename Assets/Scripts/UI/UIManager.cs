@@ -21,17 +21,29 @@ public class UIManager : MonoBehaviour
 
     //основные панели дл€ взаимодействи€ с магазином
     [SerializeField] GameObject shopSettingsPanel;
+
+    //панель рынка
     [SerializeField] GameObject marketPanel;
+    //панели внутри панели рынка
+    [SerializeField] GameObject activePanelOnMarket;
+
 
     //менеджер базы данных
     [SerializeField] DataBaseManager dataBaseManager;
     //менеджер дл€ работы с цветами
     [SerializeField] FlowersManager flowersManager;
+    //менеджер дл€ работы с работниками
+    [SerializeField] WorkersManager workersManager;
 
     //панели дл€ рынка с цветами
     [SerializeField] GameObject flowersListOnMarketContent;
     [SerializeField] GameObject flowersListOnMarketObject;
     List<GameObject> flowersOnMarketCards;
+
+    //панели дл€ рынка с работниками
+    [SerializeField] GameObject workersListOnMarketContent;
+    [SerializeField] GameObject workersListOnMarketObject;
+    List<GameObject> workersOnMarketCards;
 
     //панели дл€ цветов в магазине
     [SerializeField] GameObject flowersListOnShopContent;
@@ -101,6 +113,12 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void TogglePanelsInsideMarket(GameObject panel)
+    {
+        if (activePanelOnMarket != null) activePanelOnMarket.SetActive(false);
+        activePanelOnMarket = panel;
+        panel.SetActive(true);
+    }
     #endregion
 
     private void Awake()
@@ -108,6 +126,7 @@ public class UIManager : MonoBehaviour
         ShopManager.sendUpdatedShopInfo += GetUpdatedShopInfo;
         flowersListOnMarketContent.GetComponent<OnEnableEvent>().enabled += GetFlowersPrices;
         flowersListOnShopContent.GetComponent<OnEnableEvent>().enabled += GetShopsFlowersList;
+        workersListOnMarketContent.GetComponent<OnEnableEvent>().enabled += GetWorkersOnMarketList;
     }
 
     #region методы дл€ отображени€ и изменени€ информации о цветах
@@ -305,9 +324,43 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    
+
     #endregion
 
+
+    #region методы дл€ отображени€ и изменени€ информации о работниках
+    private void GetWorkersOnMarketList()
+    {
+        var workers = workersManager.GetAvailableWorkers();
+        RemoveWorkersCards();
+        workersOnMarketCards = new();
+
+        workers.ForEach(worker =>
+        {
+            GameObject workerCard = Instantiate(workersListOnMarketObject, workersListOnMarketContent.transform);
+            workersOnMarketCards.Add(workerCard);
+
+            workerCard.transform.Find("WorkerNameTxt").GetComponent<TMP_Text>().text = worker.name;
+            workerCard.transform.Find("WorkerDataTxt").GetComponent<TMP_Text>().text = $@"ћинимальный рейтинг магазина: {worker.minimal_shop_rating}
+                                                                                        ћинимальна€ ставка в час: {worker.minimal_hour_salary}";
+
+            workerCard.transform.Find("HireBtn").GetComponent<Button>().onClick.AddListener(() =>
+            {
+
+            });
+        });
+
+
+        void RemoveWorkersCards()
+        {
+            if(workersOnMarketCards is not null)
+            {
+                workersOnMarketCards.ForEach(card => { Destroy(card); });
+                workersOnMarketCards.Clear();
+            }
+        }
+    }
+    #endregion
 
     #region методы дл€ отображени€ информации магазина
     private void GetUpdatedShopInfo(Shop shop)
