@@ -9260,6 +9260,7 @@ MonoBehaviour:
   countFlowersInStockTxt: {fileID: 1499061750}
   changeFlowerPriceInput: {fileID: 778156266}
   toggleFlowersOnSaleInput: {fileID: 1222889166}
+  messageBanner: {fileID: 1088545709223013615, guid: 999bea9e5088ac64880fc532d794dfad, type: 3}
 --- !u!114 &1346466765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9311,6 +9312,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shopManager: {fileID: 1346466767}
+  databaseManager: {fileID: 1346466765}
 --- !u!114 &1346466769
 MonoBehaviour:
   m_ObjectHideFlags: 0

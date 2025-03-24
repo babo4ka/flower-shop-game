@@ -12,6 +12,7 @@ public class DataBaseManager : MonoBehaviour
     public static Action<Shop> updateShopData;
     public static Action<List<FlowersPrice>> updateFlowersPricesData;
     public static Action<List<ShopFlowers>> updateShopFlowersData;
+    public static Action<List<Workers>> updateWorkersData;
     #endregion
 
     private SQLiteConnection _dbConnection;
@@ -26,14 +27,13 @@ public class DataBaseManager : MonoBehaviour
         // Создание подключения к базе данных
         _dbConnection = new SQLiteConnection(databasePath);
         
-
-
         CreateDataBase();
 
         //CreateInitialShopData();
         GetShopData();
         GetShopFlowersData();
         GetFlowersPrice();
+        GetWorkersData();
         //GetFlowersDataToCheck();
         //CreateInitialPopularityPatterns();
         //CreateInitialFlowers();
@@ -194,6 +194,11 @@ public class DataBaseManager : MonoBehaviour
     {
         updateShopData?.Invoke(_dbConnection.Query<Shop>("select * from shop").First());
     }
+
+    private void GetWorkersData()
+    {
+        updateWorkersData?.Invoke(_dbConnection.Query<Workers>("select * from workers"));
+    }
     #endregion
 
 
@@ -260,6 +265,12 @@ public class DataBaseManager : MonoBehaviour
         _dbConnection.Update(flower);
 
         updateShopFlowersData?.Invoke(_dbConnection.Query<ShopFlowers>("select * from shop_flowers"));
+    }
+
+    public void HireWorker(Workers worker)
+    {
+        _dbConnection.Insert(worker);
+        updateWorkersData?.Invoke(_dbConnection.Query<Workers>("select * from workers"));
     }
 
     public enum ToggleSaleAction{

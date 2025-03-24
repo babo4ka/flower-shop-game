@@ -83,6 +83,9 @@ public class UIManager : MonoBehaviour
     //поля для внесения изменений в инфомрацию о цветах
     [SerializeField] TMP_InputField changeFlowerPriceInput;
     [SerializeField] TMP_InputField toggleFlowersOnSaleInput;
+
+    //баннер для отображения информации
+    [SerializeField] GameObject messageBanner;
     #endregion
 
     #region включение отключение элементов интерфейса
@@ -200,12 +203,14 @@ public class UIManager : MonoBehaviour
             //привязка к кнопке покупки цветов
             buyFlowerPanel.transform.Find("BuyBtn").GetComponent<Button>().onClick.AddListener(() =>
             {
-                bool bought = flowersManager.BuyFlower(flowerName, count, price);
+                var (bought, status) = flowersManager.BuyFlower(flowerName, count, price);
                 if (bought)
                 {
                 }
                 else
                 {
+                    Debug.Log(status);
+                    ShowMessage(status);
                 }
                 
             });
@@ -298,12 +303,20 @@ public class UIManager : MonoBehaviour
 
                     deleteFlowerFromSaleBtn.onClick.AddListener(() =>
                     {
-                        flowersManager.ToggleSaleFlowers(flower.flower_name, int.Parse(value), DataBaseManager.ToggleSaleAction.REMOVE);
+                        var (toggled, status) = flowersManager.ToggleSaleFlowers(flower.flower_name, int.Parse(value), DataBaseManager.ToggleSaleAction.REMOVE);
+                        if (!toggled)
+                        {
+                            Debug.Log(status);
+                        }
                     });
 
                     putFlowerOnSaleBtn.onClick.AddListener(() =>
                     {
-                        flowersManager.ToggleSaleFlowers(flower.flower_name, int.Parse(value), DataBaseManager.ToggleSaleAction.PUT);
+                        var (toggled, status) = flowersManager.ToggleSaleFlowers(flower.flower_name, int.Parse(value), DataBaseManager.ToggleSaleAction.PUT);
+                        if (!toggled)
+                        {
+                            Debug.Log(status);
+                        }
                     });
                 });
             });
@@ -346,7 +359,16 @@ public class UIManager : MonoBehaviour
 
             workerCard.transform.Find("HireBtn").GetComponent<Button>().onClick.AddListener(() =>
             {
+                var (isHired, status) = workersManager.HireWorker(worker);
 
+                if (isHired)
+                {
+
+                }
+                else
+                {
+                    Debug.Log(status);
+                }
             });
         });
 
@@ -361,6 +383,13 @@ public class UIManager : MonoBehaviour
         }
     }
     #endregion
+
+
+    private void ShowMessage(string message)
+    {
+        messageBanner.transform.Find("MessageTxt").GetComponent<TMP_Text>().text = message;
+        Instantiate(messageBanner, marketPanel.transform);
+    }
 
     #region методы для отображения информации магазина
     private void GetUpdatedShopInfo(Shop shop)

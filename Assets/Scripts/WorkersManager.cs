@@ -14,15 +14,24 @@ public class WorkersManager : MonoBehaviour
     const float base_hourly_salary = 174.35f;
     #endregion
 
+    //менеджер работы с данными магазина
     [SerializeField] ShopManager shopManager;
+    //менеджер работы с базой данных
+    [SerializeField] DataBaseManager databaseManager;
 
+    //список работников, доступных для найма
     private List<Workers> availableWorkers;
+    //список сотрудников, нанятых в магазин
+    private List<Workers> hiredWorkers;
 
     private void Awake()
     {
         GameManager.startAnotherDay += GenerateWorkers;
+        DataBaseManager.updateWorkersData += UpdateWorkersData;
     }
 
+    #region методы для изменения информации
+    //метод для генерации списка сотрудников, доступных для найма
     private void GenerateWorkers()
     {
         if(availableWorkers is not null) availableWorkers.Clear();
@@ -43,9 +52,36 @@ public class WorkersManager : MonoBehaviour
         availableWorkers.ForEach(w => { Debug.Log(w); });
     }
 
+    public (bool, string) HireWorker(Workers worker)
+    {
+        if(shopManager.CurrentRating() < worker.minimal_shop_rating)
+        {
+            return (false, $"Необходим минимальный рейтинг магазина: {worker.minimal_shop_rating}");
+        }
 
+        databaseManager.HireWorker(worker);
+
+        return (true, "");
+    }
+
+    #endregion
+
+    private void UpdateWorkersData(List<Workers> workers)
+    {
+        hiredWorkers = workers;
+    }
+
+    #region методы для получения данных по запросу к менеджеру по работе с персоналом
+    //метод для получения сотрудников, нанятых в магазин
+    public List<Workers> GetHiredWorkers()
+    {
+        return hiredWorkers;
+    }
+
+    //метод для получения списка сотрудников, доступных для найма
     public List<Workers> GetAvailableWorkers()
     {
         return availableWorkers;
     }
+    #endregion
 }

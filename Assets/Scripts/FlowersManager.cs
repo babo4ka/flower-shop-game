@@ -68,28 +68,35 @@ public class FlowersManager : MonoBehaviour
     }
 
     //выставление цветка на продажу
-    public bool ToggleSaleFlowers(string flowerName, int count, DataBaseManager.ToggleSaleAction action)
+    public (bool, string) ToggleSaleFlowers(string flowerName, int count, DataBaseManager.ToggleSaleAction action)
     {
-        if(GetShopFlowerByName(flowerName).count_in_stock >= count)
+
+        switch (action)
         {
-            dataBaseManager.ToggleSaleFlowers(flowerName, count, action);
-            return true;
+            case DataBaseManager.ToggleSaleAction.PUT:
+                if (GetShopFlowerByName(flowerName).count_in_stock < count) return (false, "Недостаточно цветов на складе");
+                break;
+
+            case DataBaseManager.ToggleSaleAction.REMOVE:
+                if (GetShopFlowerByName(flowerName).count_on_sale < count) return (false, "Недостаточно цветов на витрине");
+                break;
         }
 
-        return false;
+        dataBaseManager.ToggleSaleFlowers(flowerName, count, action);
+        return (true, "");
     }
 
     //покупка цветка
-    public bool BuyFlower(string flowerName, int count, float price)
+    public (bool, string) BuyFlower(string flowerName, int count, float price)
     {
         if (shopManager.IsCashEnough(count*price))
         {
             dataBaseManager.BuyFlower(flowerName, count, price);
-            return true;
+            return (true, "");
         }
         else
         {
-            return false;
+            return (false, "Недостаточно средств");
         }
     }
     

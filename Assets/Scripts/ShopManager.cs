@@ -34,6 +34,5 @@ public class ShopManager : MonoBehaviour
     {
         return shop.rating;
     }
-
     #endregion
 }
