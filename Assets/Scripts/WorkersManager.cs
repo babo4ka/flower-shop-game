@@ -47,10 +47,8 @@ public class WorkersManager : MonoBehaviour
                 motivation = 100f, minimal_hour_salary = base_hourly_salary * multipliers[shopManager.CurrentRating()]
             });
         }
-
-
-        availableWorkers.ForEach(w => { Debug.Log(w); });
     }
+
 
     public (bool, string) HireWorker(Workers worker)
     {
@@ -60,10 +58,14 @@ public class WorkersManager : MonoBehaviour
         }
 
         databaseManager.HireWorker(worker);
-
+        availableWorkers.Remove(worker);
         return (true, "");
     }
 
+    public void FireWorker(Workers worker)
+    {
+        databaseManager.FireWorker(worker);
+    }
     #endregion
 
     private void UpdateWorkersData(List<Workers> workers)

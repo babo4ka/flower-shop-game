@@ -273,6 +273,12 @@ public class DataBaseManager : MonoBehaviour
         updateWorkersData?.Invoke(_dbConnection.Query<Workers>("select * from workers"));
     }
 
+    public void FireWorker(Workers worker)
+    {
+        _dbConnection.Delete(worker);
+        updateWorkersData?.Invoke(_dbConnection.Query<Workers>("select * from workers"));
+    }
+
     public enum ToggleSaleAction{
         PUT, REMOVE
     }

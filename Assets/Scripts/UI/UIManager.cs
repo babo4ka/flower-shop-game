@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -21,6 +22,8 @@ public class UIManager : MonoBehaviour
 
     //основные панели дл€ взаимодействи€ с магазином
     [SerializeField] GameObject shopSettingsPanel;
+    //панели внутри настроек магазина
+    [SerializeField] GameObject activePanelOnShopSettings;
 
     //панель рынка
     [SerializeField] GameObject marketPanel;
@@ -49,6 +52,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject flowersListOnShopContent;
     [SerializeField] GameObject flowersListOnShopObject;
     List<GameObject> flowersOnShopCards;
+
+    //панели дл€ нан€тых работников
+    [SerializeField] GameObject hiredWorkersListContent;
+    [SerializeField] GameObject hiredWorkersListObject;
+    List<GameObject> hiredWorkersCards;
 
     //график попул€рности
     //панель дл€ графика
@@ -122,6 +130,13 @@ public class UIManager : MonoBehaviour
         activePanelOnMarket = panel;
         panel.SetActive(true);
     }
+
+    public void TogglePanelsInsideShopSettings(GameObject panel)
+    {
+        if (activePanelOnShopSettings != null) activePanelOnShopSettings.SetActive(false);
+        activePanelOnShopSettings = panel;
+        panel.SetActive(true);
+    }
     #endregion
 
     private void Awake()
@@ -130,6 +145,7 @@ public class UIManager : MonoBehaviour
         flowersListOnMarketContent.GetComponent<OnEnableEvent>().enabled += GetFlowersPrices;
         flowersListOnShopContent.GetComponent<OnEnableEvent>().enabled += GetShopsFlowersList;
         workersListOnMarketContent.GetComponent<OnEnableEvent>().enabled += GetWorkersOnMarketList;
+        hiredWorkersListContent.GetComponent<OnEnableEvent>().enabled += GetHiredWorkersList;
     }
 
     #region методы дл€ отображени€ и изменени€ информации о цветах
@@ -137,7 +153,7 @@ public class UIManager : MonoBehaviour
     private void GetFlowersPrices()
     {
         List<FlowersPrice> stories = flowersManager.GetFlowersPrice();
-        RemoveFlowerOnMarketCards();
+        RemoveCards(flowersOnMarketCards);
         flowersOnMarketCards = new();
 
         stories.ForEach(story =>
@@ -166,19 +182,6 @@ public class UIManager : MonoBehaviour
             
         });
 
-
-        void RemoveFlowerOnMarketCards()
-        {
-            if(flowersOnMarketCards is not null)
-            {
-                flowersOnMarketCards.ForEach(card =>
-                {
-                    Destroy(card);
-                });
-
-                flowersOnMarketCards.Clear();
-            }
-        }
     }
 
     
@@ -265,7 +268,7 @@ public class UIManager : MonoBehaviour
     private void GetShopsFlowersList()
     {
         List<ShopFlowers> flowers = flowersManager.GetShopFlowers();
-        RemoveShopFlowerCards();
+        RemoveCards(flowersOnShopCards);
         flowersOnShopCards = new();
         flowers.ForEach(flower =>
         {
@@ -322,30 +325,18 @@ public class UIManager : MonoBehaviour
             });
 
         });
-
-        void RemoveShopFlowerCards()
-        {
-            if(flowersOnShopCards is not null)
-            {
-                flowersOnShopCards.ForEach(card =>
-                {
-                    Destroy(card);
-                });
-
-                flowersOnShopCards.Clear();
-            }
-        }
     }
 
 
     #endregion
 
 
+
     #region методы дл€ отображени€ и изменени€ информации о работниках
     private void GetWorkersOnMarketList()
     {
         var workers = workersManager.GetAvailableWorkers();
-        RemoveWorkersCards();
+        RemoveCards(workersOnMarketCards);
         workersOnMarketCards = new();
 
         workers.ForEach(worker =>
@@ -363,7 +354,7 @@ public class UIManager : MonoBehaviour
 
                 if (isHired)
                 {
-
+                    ReloadPanel(activePanelOnMarket);
                 }
                 else
                 {
@@ -371,24 +362,53 @@ public class UIManager : MonoBehaviour
                 }
             });
         });
+    }
 
 
-        void RemoveWorkersCards()
+    private void GetHiredWorkersList()
+    {
+        var workers = workersManager.GetHiredWorkers();
+        RemoveCards(hiredWorkersCards);
+        hiredWorkersCards = new();
+
+        workers.ForEach(worker =>
         {
-            if(workersOnMarketCards is not null)
+            GameObject workerCard = Instantiate(hiredWorkersListObject, hiredWorkersListContent.transform);
+            hiredWorkersCards.Add(workerCard);
+
+            workerCard.transform.Find("WorkerNameTxt").GetComponent<TMP_Text>().text = worker.name;
+            workerCard.transform.Find("WorkerDataTxt").GetComponent<TMP_Text>().text = $@"ћотиваци€ сотрудника: {worker.motivation}
+                                                                                        ћинимальна€ ставка в час: {worker.minimal_hour_salary}";
+
+            workerCard.transform.Find("FireBtn").GetComponent<Button>().onClick.AddListener(() =>
             {
-                workersOnMarketCards.ForEach(card => { Destroy(card); });
-                workersOnMarketCards.Clear();
-            }
-        }
+                workersManager.FireWorker(worker);
+                ReloadPanel(activePanelOnShopSettings);
+            });
+        });
     }
     #endregion
 
+
+    private void RemoveCards(List<GameObject> cards)
+    {
+        if (cards is not null)
+        {
+            cards.ForEach(card => { Destroy(card); });
+            cards.Clear();
+        }
+    }
 
     private void ShowMessage(string message)
     {
         messageBanner.transform.Find("MessageTxt").GetComponent<TMP_Text>().text = message;
         Instantiate(messageBanner, marketPanel.transform);
+    }
+
+    private void ReloadPanel(GameObject panel)
+    {
+        panel.SetActive(false);
+        panel.SetActive(true);
     }
 
     #region методы дл€ отображени€ информации магазина
