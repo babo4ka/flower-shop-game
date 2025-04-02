@@ -20,15 +20,19 @@ public class UIManager : MonoBehaviour
     [SerializeField] TMP_Text cashTxt;
     [SerializeField] TMP_Text daysTxt;
 
-    //основные панели дл€ взаимодействи€ с магазином
-    [SerializeField] GameObject shopSettingsPanel;
-    //панели внутри настроек магазина
-    [SerializeField] GameObject activePanelOnShopSettings;
+    //основные панели дл€ взаимодействи€ с цветами
+    [SerializeField] GameObject flowersSettingsPanel;
+    //панели внутри панели с цветами
+    [SerializeField] GameObject shopFlowersPanel;
+    [SerializeField] GameObject marketFlowersPanel;
+    [SerializeField] TMP_Text flowersPanelName;
 
     //панель рынка
-    [SerializeField] GameObject marketPanel;
-    //панели внутри панели рынка
-    [SerializeField] GameObject activePanelOnMarket;
+    [SerializeField] GameObject workersPanel;
+    //панели внутри панели персонала
+    [SerializeField] GameObject workersToHirePanel;
+    [SerializeField] GameObject hiredWorkersPanel;
+    [SerializeField] TMP_Text workersPanelName;
 
 
     //менеджер базы данных
@@ -98,43 +102,66 @@ public class UIManager : MonoBehaviour
 
     #region включение отключение элементов интерфейса
     //метод дл€ переключени€ панели настроек магазина
-    public void ToggleShopSettingsPanel()
+    public void ToggleFlowersSettingsPanel()
     {
         
-        if(shopSettingsPanel.activeInHierarchy)
+        if(flowersSettingsPanel.activeInHierarchy)
         {
-            shopSettingsPanel.SetActive(false);
+            flowersSettingsPanel.SetActive(false);
         }
         else
         {
-            shopSettingsPanel.SetActive(true);
+            flowersSettingsPanel.SetActive(true);
+        }
+    }
+
+    public void TogglePanelsAboutFlowers()
+    {
+        if (shopFlowersPanel.activeInHierarchy)
+        {
+            shopFlowersPanel.SetActive(false);
+            marketFlowersPanel.SetActive(true);
+            flowersPanelName.text = "рынок";
+        }
+        else
+        {
+            shopFlowersPanel.SetActive(true);
+            marketFlowersPanel.SetActive(false);
+            flowersPanelName.text = "склад";
         }
     }
 
     //метод дл€ переключени€ панели рынка
-    public void ToggleMarketPanel()
+    public void ToggleWorkersPanel()
     {
-        if(marketPanel.activeInHierarchy)
+        if(workersPanel.activeInHierarchy)
         {
-            marketPanel.SetActive(false);
+            workersPanel.SetActive(false);
         }
         else
         {
-            marketPanel.SetActive(true);
+            workersPanel.SetActive(true);
         }
     }
 
-    public void TogglePanelsInsideMarket(GameObject panel)
+    public void TogglePanelAboutWorkers()
     {
-        if (activePanelOnMarket != null) activePanelOnMarket.SetActive(false);
-        activePanelOnMarket = panel;
-        panel.SetActive(true);
+        if (workersToHirePanel.activeInHierarchy)
+        {
+            workersToHirePanel.SetActive(false);
+            hiredWorkersPanel.SetActive(true);
+            workersPanelName.text = "рабочие";
+        }else{
+            workersToHirePanel.SetActive(true);
+            hiredWorkersPanel.SetActive(false);
+            workersPanelName.text = "биржа";
+        }
     }
 
     public void TogglePanelsInsideShopSettings(GameObject panel)
     {
-        if (activePanelOnShopSettings != null) activePanelOnShopSettings.SetActive(false);
-        activePanelOnShopSettings = panel;
+        if (shopFlowersPanel != null) shopFlowersPanel.SetActive(false);
+        shopFlowersPanel = panel;
         panel.SetActive(true);
     }
     #endregion
@@ -354,7 +381,7 @@ public class UIManager : MonoBehaviour
 
                 if (isHired)
                 {
-                    ReloadPanel(activePanelOnMarket);
+                    ReloadPanel(workersToHirePanel);
                 }
                 else
                 {
@@ -383,7 +410,7 @@ public class UIManager : MonoBehaviour
             workerCard.transform.Find("FireBtn").GetComponent<Button>().onClick.AddListener(() =>
             {
                 workersManager.FireWorker(worker);
-                ReloadPanel(activePanelOnShopSettings);
+                ReloadPanel(hiredWorkersPanel);
             });
         });
     }
@@ -402,13 +429,16 @@ public class UIManager : MonoBehaviour
     private void ShowMessage(string message)
     {
         messageBanner.transform.Find("MessageTxt").GetComponent<TMP_Text>().text = message;
-        Instantiate(messageBanner, marketPanel.transform);
+        Instantiate(messageBanner, workersPanel.transform);
     }
 
     private void ReloadPanel(GameObject panel)
     {
-        panel.SetActive(false);
-        panel.SetActive(true);
+        if (panel.activeInHierarchy)
+        {
+            panel.SetActive(false);
+            panel.SetActive(true);
+        }
     }
 
     #region методы дл€ отображени€ информации магазина
