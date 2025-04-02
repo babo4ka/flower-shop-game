@@ -157,13 +157,6 @@ public class UIManager : MonoBehaviour
             workersPanelName.text = "биржа";
         }
     }
-
-    public void TogglePanelsInsideShopSettings(GameObject panel)
-    {
-        if (shopFlowersPanel != null) shopFlowersPanel.SetActive(false);
-        shopFlowersPanel = panel;
-        panel.SetActive(true);
-    }
     #endregion
 
     private void Awake()
