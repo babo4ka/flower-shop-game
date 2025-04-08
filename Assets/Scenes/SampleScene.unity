@@ -395,7 +395,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.74, y: 0.063287675}
   m_AnchorMax: {x: 0.9803094, y: 0.17389916}
-  m_AnchoredPosition: {x: 75.849976, y: -26.25885}
+  m_AnchoredPosition: {x: 75.849976, y: -26.25882}
   m_SizeDelta: {x: -151.6992, y: 27.3947}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &61025981
@@ -7514,6 +7514,7 @@ GameObject:
   - component: {fileID: 1346466767}
   - component: {fileID: 1346466768}
   - component: {fileID: 1346466769}
+  - component: {fileID: 1346466770}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -7650,6 +7651,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54213fb28b714f64bbe90e68607efaa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1346466770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1346466762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9095d3aaa9df6e409c258741f6e0078, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shopManager: {fileID: 1346466767}
+  flowersManager: {fileID: 1346466766}
 --- !u!1 &1356240125
 GameObject:
   m_ObjectHideFlags: 0
@@ -9562,7 +9577,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.41500002}
   m_AnchorMax: {x: 1, y: 0.5721832}
-  m_AnchoredPosition: {x: 53.00116, y: 1.4169493}
+  m_AnchoredPosition: {x: 53.00116, y: 1.4169464}
   m_SizeDelta: {x: 80, y: 1.6620178}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1591723678
@@ -9830,7 +9845,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.41500002}
   m_AnchorMax: {x: 0, y: 0.5721832}
-  m_AnchoredPosition: {x: -40.151085, y: 1.4169493}
+  m_AnchoredPosition: {x: -40.151062, y: 1.4169464}
   m_SizeDelta: {x: 79, y: -0.33798218}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1626250047
