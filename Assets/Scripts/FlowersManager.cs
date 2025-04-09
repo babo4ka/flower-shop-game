@@ -123,6 +123,19 @@ public class FlowersManager : MonoBehaviour
 
         return -1f;
     }
+
+    public float GetShopFlowerPriceByName(string flowerName)
+    {
+        foreach (var flower in shopflowers)
+        {
+            if (flower.flower_name == flowerName)
+            {
+                return flower.price;
+            }
+        }
+
+        return -1f;
+    }
     #endregion
 
 }

@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,8 @@ public class WorkersManager : MonoBehaviour
 
     const float base_hourly_salary = 174.35f;
     #endregion
+
+    public static Action<Workers, string> replaceWorkerOnShift;
 
     //менеджер работы с данными магазина
     [SerializeField] ShopManager shopManager;
@@ -38,11 +41,11 @@ public class WorkersManager : MonoBehaviour
         availableWorkers = new();
 
 
-        int count = Random.Range(3, 12);
+        int count = UnityEngine.Random.Range(3, 12);
 
         for (int i=0;i<count;i++)
         {
-            availableWorkers.Add(new Workers() { name = names[Random.Range(0, names.Length)], 
+            availableWorkers.Add(new Workers() { name = names[UnityEngine.Random.Range(0, names.Length)], 
                 minimal_shop_rating = shopManager.CurrentRating(),
                 motivation = 100f, minimal_hour_salary = base_hourly_salary * multipliers[shopManager.CurrentRating()]
             });
@@ -84,6 +87,16 @@ public class WorkersManager : MonoBehaviour
     public List<Workers> GetAvailableWorkers()
     {
         return availableWorkers;
+    }
+
+    public void SendWorkerToShift(Workers worker)
+    {
+        replaceWorkerOnShift?.Invoke(worker, "to");
+    }
+
+    public void ReturnWorkerFromShift(Workers worker)
+    {
+        replaceWorkerOnShift?.Invoke(worker, "from");
     }
     #endregion
 }

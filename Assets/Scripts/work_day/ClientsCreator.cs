@@ -9,10 +9,8 @@ public class ClientsCreator
     //менеджер для работы с данными цветов
     readonly FlowersManager flowersManager;
 
-    const float down = 2f;
     const float up = 3f;
 
-    private List<Client> clientsForDay;
 
     private string[] flowerNames;
 
@@ -23,21 +21,19 @@ public class ClientsCreator
     }
 
 
-    public void SetCleintsForDay()
+    public List<Client> GetClients()
     {
-        clientsForDay??= new();
-        clientsForDay.Clear();
+        var clients = new List<Client>();    
+        int clientsCount = Random.Range(1, 4);
 
-        int clientsCount = Random.Range(15, 40);
-
-        for(int i=0;i<clientsCount; i++)
+        for (int i = 0; i < clientsCount; i++)
         {
             string flowerWants = flowerNames[Random.Range(0, flowerNames.Length)];
             float flowerPrice = flowersManager.GetFlowerPriceByName(flowerWants);
-            clientsForDay.Add(new Client(flowerWants, 
-                new float[] { (flowerPrice - (flowerPrice * (down * shopManager.CurrentRating() / 100))), 
-                    (flowerPrice + (flowerPrice * (up * shopManager.CurrentRating()/ 100))) }));
+            clients.Add(new Client(flowerWants, flowerPrice + (flowerPrice * (up * shopManager.CurrentRating()/ 100)), flowerPrice));
         }
 
+        return clients;
     }
+
 }

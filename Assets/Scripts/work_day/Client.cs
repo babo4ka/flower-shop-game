@@ -1,9 +1,11 @@
+using System;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class Client
 {
-    private float _satisfaction;
+    private float _satisfaction = 0;
 
     public float Satisfaction
     {
@@ -19,18 +21,39 @@ public class Client
         set { _flowerWants = value; }
     }
 
-    private float[] _priceRange;
-    public float[] PriceWants
+    private float maxPrice;
+    public float MaxPrice
     {
-        get { return _priceRange; }
-        set { _priceRange = value; }
+        get => maxPrice;
+        set { maxPrice = value; }
+    }
+
+    private float baseFlowerPrice;
+
+    public float BaseFlowerPrice
+    {
+        get => baseFlowerPrice;
+        set { baseFlowerPrice = value; }
+    }
+
+    public float GetPriceSatisfaction(float price)
+    {
+        if (price > maxPrice) return 0;
+        if (price == baseFlowerPrice) return 1;
+
+        float step = (maxPrice - baseFlowerPrice) / 2;
+
+        if (price <= maxPrice && price > maxPrice - step)return .5f;
+        else if (price <= maxPrice - step && price > baseFlowerPrice) return .75f;
+        else if (price < baseFlowerPrice && price > baseFlowerPrice - step) return 1.25f;
+        else return 1.5f;
     }
 
 
-    public Client(string flowerWants, float[] priceRange)
+    public Client(string flowerWants, float maxPrice, float baseFlowerPrice)
     {
-        Satisfaction = 100f;
         FlowerWants = flowerWants;
-        PriceWants = priceRange;
+        MaxPrice = maxPrice;
+        BaseFlowerPrice = baseFlowerPrice;
     }
 }
