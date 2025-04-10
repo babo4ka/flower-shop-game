@@ -69,6 +69,16 @@ public class WorkersManager : MonoBehaviour
     {
         databaseManager.FireWorker(worker);
     }
+
+    public void DecreaseWorkerMotivation(Workers worker, float amount)
+    {
+        databaseManager.DecreaseWorkerMotivation(worker, amount);
+    }
+
+    public void IncreaseWorkerMotivation(Workers worker, float amount)
+    {
+        databaseManager.IncreaseWorkerMotivation(worker, amount);
+    }
     #endregion
 
     private void UpdateWorkersData(List<Workers> workers)

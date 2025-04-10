@@ -99,6 +99,11 @@ public class FlowersManager : MonoBehaviour
             return (false, "Недостаточно средств");
         }
     }
+
+    public void SpendFlower(string flowerName)
+    {
+        dataBaseManager.SpendFlower(flowerName);
+    }
     
     //получение цветов в магазине
     public List<ShopFlowers> GetShopFlowers()

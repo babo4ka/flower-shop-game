@@ -27,12 +27,15 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject marketFlowersPanel;
     [SerializeField] TMP_Text flowersPanelName;
 
-    //панель рынка
+    //панель для данных работников
     [SerializeField] GameObject workersPanel;
     //панели внутри панели персонала
     [SerializeField] GameObject workersToHirePanel;
     [SerializeField] GameObject hiredWorkersPanel;
     [SerializeField] TMP_Text workersPanelName;
+
+    //панели для начала рабочего дня
+    [SerializeField] GameObject shiftWorkersPanel;
 
 
     //менеджер базы данных
@@ -61,6 +64,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject hiredWorkersListContent;
     [SerializeField] GameObject hiredWorkersListObject;
     List<GameObject> hiredWorkersCards;
+
+
+    //панели для работников на смену
+    [SerializeField] GameObject shiftWorkersListContent;
+    [SerializeField] GameObject shiftWorkersListObject;
+    List<GameObject> shiftWorkersCards;
+    //панель с интерфейсом вывода работника на смену
+    [SerializeField] GameObject salaryForWorkerSettingPanel;
 
     //график популярности
     //панель для графика
@@ -101,7 +112,7 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region включение отключение элементов интерфейса
-    //метод для переключения панели настроек магазина
+    //метод для переключения панели цветов
     public void ToggleFlowersSettingsPanel()
     {
         
@@ -112,6 +123,8 @@ public class UIManager : MonoBehaviour
         else
         {
             flowersSettingsPanel.SetActive(true);
+            workersPanel.SetActive(false);
+            shiftWorkersPanel.SetActive(false);
         }
     }
 
@@ -131,7 +144,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    //метод для переключения панели рынка
+    //метод для переключения панели персонала
     public void ToggleWorkersPanel()
     {
         if(workersPanel.activeInHierarchy)
@@ -141,6 +154,8 @@ public class UIManager : MonoBehaviour
         else
         {
             workersPanel.SetActive(true);
+            flowersSettingsPanel.SetActive(false);
+            shiftWorkersPanel.SetActive(false);
         }
     }
 
@@ -157,6 +172,20 @@ public class UIManager : MonoBehaviour
             workersPanelName.text = "биржа";
         }
     }
+
+    public void ToggleStartShiftPanel()
+    {
+        if (shiftWorkersPanel.activeInHierarchy)
+        {
+            shiftWorkersPanel.SetActive(false);
+        }
+        else
+        {
+            shiftWorkersPanel.SetActive(true);
+            workersPanel.SetActive(false);
+            flowersSettingsPanel.SetActive(false);
+        }
+    }
     #endregion
 
     private void Awake()
@@ -166,6 +195,7 @@ public class UIManager : MonoBehaviour
         flowersListOnShopContent.GetComponent<OnEnableEvent>().enabled += GetShopsFlowersList;
         workersListOnMarketContent.GetComponent<OnEnableEvent>().enabled += GetWorkersOnMarketList;
         hiredWorkersListContent.GetComponent<OnEnableEvent>().enabled += GetHiredWorkersList;
+        shiftWorkersListContent.GetComponent<OnEnableEvent>().enabled += GetShiftWorkersList;
     }
 
     #region методы для отображения и изменения информации о цветах
@@ -215,16 +245,19 @@ public class UIManager : MonoBehaviour
         buyFlowerPanel.transform.Find("FlowerNameTxt").GetComponent<TMP_Text>().text = flowerName;
         buyFlowerPanel.transform.Find("PriceTxt").GetComponent<TMP_Text>().text = $"Цена: {price}";
 
-        buyFlowerPanel.transform.Find("CountInput").GetComponent<TMP_InputField>().onValueChanged.RemoveAllListeners();
-        buyFlowerPanel.transform.Find("BuyBtn").GetComponent<Button>().onClick.RemoveAllListeners();
+        var countInput = buyFlowerPanel.transform.Find("CountInput").GetComponent<TMP_InputField>();
+        var buyBtn = buyFlowerPanel.transform.Find("BuyBtn").GetComponent<Button>();
 
-        buyFlowerPanel.transform.Find("CountInput").GetComponent<TMP_InputField>().onValueChanged.AddListener((input) => {
+        countInput.onValueChanged.RemoveAllListeners();
+        
+
+        countInput.onValueChanged.AddListener((input) => {
             int count = int.Parse(input);
             float sum = (float)Math.Round(price * count, 2);
             buyFlowerPanel.transform.Find("SumTxt").GetComponent<TMP_Text>().text = $"Сумма: {sum}";
-
+            buyBtn.onClick.RemoveAllListeners();
             //привязка к кнопке покупки цветов
-            buyFlowerPanel.transform.Find("BuyBtn").GetComponent<Button>().onClick.AddListener(() =>
+            buyBtn.onClick.AddListener(() =>
             {
                 var (bought, status) = flowersManager.BuyFlower(flowerName, count, price);
                 if (bought)
@@ -232,8 +265,7 @@ public class UIManager : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log(status);
-                    ShowMessage(status);
+                    ShowMessage(status, flowersSettingsPanel);
                 }
                 
             });
@@ -409,6 +441,58 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
+    #region методы для отображения и изменения информации о рабочем дне
+    private void GetShiftWorkersList()
+    {
+        var workers = workersManager.GetHiredWorkers();
+        RemoveCards(shiftWorkersCards);
+        shiftWorkersCards = new();
+
+        workers.ForEach(worker =>
+        {
+            GameObject workerCard = Instantiate(shiftWorkersListObject, shiftWorkersListContent.transform);
+            shiftWorkersCards.Add(workerCard);
+
+            workerCard.transform.Find("WorkerNameTxt").GetComponent<TMP_Text>().text = worker.name;
+            workerCard.transform.Find("WorkerDataTxt").GetComponent<TMP_Text>().text = $"Мотивация сотрудника: {worker.motivation}";
+
+            workerCard.transform.Find("ShiftBtn").GetComponent<Button>().onClick.AddListener(() =>
+            {
+                OpenSalaryForWorkerSettingPanel(worker);
+            });
+        });
+    }
+
+    private void OpenSalaryForWorkerSettingPanel(Workers worker)
+    {
+        salaryForWorkerSettingPanel.SetActive(true);
+        salaryForWorkerSettingPanel.transform.Find("CloseBtn").GetComponent<Button>()
+            .onClick.AddListener(() => { salaryForWorkerSettingPanel.SetActive(false); });
+
+        salaryForWorkerSettingPanel.transform.Find("NameTxt").GetComponent<TMP_Text>().text = worker.name;
+
+        var salaryInput = salaryForWorkerSettingPanel.transform.Find("HourlySalaryInput").GetComponent<TMP_InputField>();
+        var toShiftBtn = salaryForWorkerSettingPanel.transform.Find("ToShiftBtn").GetComponent<Button>();
+
+        salaryInput.onValueChanged.RemoveAllListeners();
+
+        salaryInput.onValueChanged.AddListener((input) =>
+        {
+            toShiftBtn.onClick.RemoveAllListeners();
+            toShiftBtn.onClick.AddListener(() =>
+            {
+                if(float.Parse(input) >= worker.minimal_hour_salary)
+                {
+                    workersManager.SendWorkerToShift(worker);
+                }
+                else
+                {
+                    ShowMessage("Недостаточная часовая ставка для этого сотрудника!", shiftWorkersPanel);
+                }
+            });
+        });
+    }
+    #endregion
 
     private void RemoveCards(List<GameObject> cards)
     {
@@ -419,10 +503,11 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void ShowMessage(string message)
+    private void ShowMessage(string message, GameObject panel)
     {
         messageBanner.transform.Find("MessageTxt").GetComponent<TMP_Text>().text = message;
-        Instantiate(messageBanner, workersPanel.transform);
+        Instantiate(messageBanner, panel.transform);
+        Debug.Log(message);
     }
 
     private void ReloadPanel(GameObject panel)

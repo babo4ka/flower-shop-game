@@ -5,6 +5,8 @@ public class ShopManager : MonoBehaviour
 {
     public static Action<Shop> sendUpdatedShopInfo;
 
+    [SerializeField] DataBaseManager dataBaseManager;
+
     //сущность магазина
     private Shop shop;
 
@@ -21,6 +23,14 @@ public class ShopManager : MonoBehaviour
         this.shop = shop;
         sendUpdatedShopInfo?.Invoke(shop);
     }
+    #endregion
+
+    #region методы обновления информации в базе данных
+    public void AddCash(float amount)
+    {
+        dataBaseManager.AddCash(amount);
+    }
+
     #endregion
 
 

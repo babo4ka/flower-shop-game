@@ -8,6 +8,8 @@ public class WorkDayManager : MonoBehaviour
     [SerializeField] ShopManager shopManager;
     //менеджер для работы с данными цветов
     [SerializeField] FlowersManager flowersManager;
+    //менеджер для работы с данынми работников
+    [SerializeField] WorkersManager workersManager;
 
     private ClientsCreator clientCreator;
     private Queue<Client> clientsQueue;
@@ -21,7 +23,7 @@ public class WorkDayManager : MonoBehaviour
 
     private bool dayStarted = false;
 
-    private Dictionary<Workers, ServeClient> workersCoroutines = new Dictionary<Workers, ServeClient>();
+    private Dictionary<Workers, ServeClient> workersCoroutines = new();
     
     private Workers GetFreeWorker()
     {
@@ -51,6 +53,10 @@ public class WorkDayManager : MonoBehaviour
                 CancelInvoke();
                 dayStartTime = -1f;
                 dayStarted = false;
+
+                clientsQueue.Clear();
+                workersOnShift.Clear();
+                workersCoroutines.Clear();
             }
 
             var freeWorker = GetFreeWorker();
@@ -68,22 +74,28 @@ public class WorkDayManager : MonoBehaviour
 
     private void StartAnotherDay()
     {
+        
+    }
+
+    private void StartWorkDay()
+    {
         clientsQueue = new Queue<Client>();
-        InvokeRepeating("GetClients", 0, 15);
+        InvokeRepeating("GetClients", 0, 5);
         dayStartTime = Time.time;
         dayStarted = true;
     }
 
-    
-
 
     private void GetCleints()
     {
-        var clients = clientCreator.GetClients();
-        clients.ForEach(c =>
+        if(Time.time - dayStartTime >= 10)
         {
-            clientsQueue.Enqueue(c);
-        });
+            var clients = clientCreator.GetClients();
+            clients.ForEach(c =>
+            {
+                clientsQueue.Enqueue(c);
+            });
+        }
     }
 
 
@@ -94,7 +106,8 @@ public class WorkDayManager : MonoBehaviour
             case "to":
                 workersOnShift ??= new();
                 workersOnShift.Add(worker);
-                workersCoroutines.Add(worker, new ServeClient(worker.motivation));
+                workersCoroutines.Add(worker, new ServeClient(worker.motivation, shopManager, flowersManager, workersManager, worker));
+                Debug.Log($"added worker {worker.name}");
                 break;
 
             case "from":
@@ -108,13 +121,25 @@ public class WorkDayManager : MonoBehaviour
     
     class ServeClient : IEnumerator
     {
+        //длительность обслуживания клиента работником
         private float duration;
+        //мотивация работника
         private float workerMotivation;
+        //занят ли работник
         private bool isBuzy;
+        //цена цветка
         private float flowerPrice;
+        //клиент, которого обслуживают
         private Client client;
+        //работник
+        private Workers worker;
 
-        private const float baseServiceTime = 5f;
+        //базовое время обслуживания клиентов
+        private const float baseServiceTime = .5f;
+
+        private ShopManager shopManager;
+        private FlowersManager flowersManager;
+        private WorkersManager workersManager;
 
         public bool IsBuzy
         {
@@ -134,6 +159,9 @@ public class WorkDayManager : MonoBehaviour
             set { flowerPrice = value; }
         }
 
+        private const float maxSatisfaction = 150;
+        private const float minSatisfaction = 12.5f;
+
         public object Current => new WaitForSeconds(duration);
 
         public bool MoveNext()
@@ -141,7 +169,21 @@ public class WorkDayManager : MonoBehaviour
             isBuzy = false;
             var partOfSatisfaction = workerMotivation * client.GetPriceSatisfaction(flowerPrice);
             var percent = duration / baseServiceTime * 10;
-            client.Satisfaction = partOfSatisfaction - (partOfSatisfaction * (percent/100));
+            var satisfaction = partOfSatisfaction - (partOfSatisfaction * (percent / 100));
+            client.Satisfaction = satisfaction;
+
+            shopManager.AddCash(flowerPrice);
+            flowersManager.SpendFlower(client.FlowerWants);
+
+            var satisfactionPercent = (satisfaction - minSatisfaction) / (maxSatisfaction - minSatisfaction);
+
+            if(satisfactionPercent < 25)
+            {
+                workersManager.DecreaseWorkerMotivation(worker, 10f);
+            }else if(satisfactionPercent > 75)
+            {
+                workersManager.IncreaseWorkerMotivation(worker, 10f);
+            }
             return false;
         }
 
@@ -150,11 +192,16 @@ public class WorkDayManager : MonoBehaviour
             throw new System.NotImplementedException();
         }
 
-        public ServeClient(float workerMotivation)
+        public ServeClient(float workerMotivation, ShopManager sm, FlowersManager fm, WorkersManager wm, Workers w)
         {
-            this.duration = baseServiceTime * ((100 - workerMotivation) / 10);
+            duration = baseServiceTime * ((100 - workerMotivation) / 10);
             isBuzy = false;
             this.workerMotivation = workerMotivation;
+
+            shopManager = sm;
+            flowersManager = fm;
+            workersManager = wm;
+            worker = w;
         }
     }
 }

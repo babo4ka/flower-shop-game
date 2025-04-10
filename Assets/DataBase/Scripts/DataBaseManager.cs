@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Globalization;
+using System.Security.Cryptography;
 
 public class DataBaseManager : MonoBehaviour
 {
@@ -276,6 +277,38 @@ public class DataBaseManager : MonoBehaviour
     {
         _dbConnection.Delete(worker);
         updateWorkersData?.Invoke(_dbConnection.Query<Workers>("select * from workers"));
+    }
+
+    public void DecreaseWorkerMotivation(Workers worker, float amount)
+    {
+        worker.motivation -= amount;
+        _dbConnection.Update(worker);
+        updateWorkersData?.Invoke(_dbConnection.Query<Workers>("select * from workers"));
+    }
+
+    public void IncreaseWorkerMotivation(Workers worker, float amount)
+    {
+        worker.motivation += amount;
+        _dbConnection.Update(worker);
+        updateWorkersData?.Invoke(_dbConnection.Query<Workers>("select * from workers"));
+    }
+
+    public void AddCash(float amount)
+    {
+        var shop = _dbConnection.Query<Shop>("select * from shop").First();
+        shop.cash += amount;
+
+        _dbConnection.Update(shop);
+        updateShopData?.Invoke(shop);
+    }
+
+    public void SpendFlower(string flowerName)
+    {
+        ShopFlowers flower = _dbConnection.Query<ShopFlowers>($"select * from shop_flowers where flower_name = \"{flowerName}\"").First();
+
+        flower.count_on_sale--;
+        _dbConnection.Update(flower);
+        updateShopFlowersData?.Invoke(_dbConnection.Query<ShopFlowers>("select * from shop_flowers"));
     }
 
     public enum ToggleSaleAction{

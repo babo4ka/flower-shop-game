@@ -12,6 +12,9 @@ public class Workers
     public float motivation { get; set; }
 
     public int minimal_shop_rating {  get; set; }
-
+    
     public float minimal_hour_salary { get; set; }
+
+    [Ignore]
+    public float hour_salary { get; set; }
 }
