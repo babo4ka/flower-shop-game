@@ -293,6 +293,12 @@ public class DataBaseManager : MonoBehaviour
         updateWorkersData?.Invoke(_dbConnection.Query<Workers>("select * from workers"));
     }
 
+    public void UpdateWorker(Workers worker)
+    {
+        _dbConnection.Update(worker);
+        updateWorkersData?.Invoke(_dbConnection.Query<Workers>("select * from workers"));
+    }
+
     public void AddCash(float amount)
     {
         var shop = _dbConnection.Query<Shop>("select * from shop").First();

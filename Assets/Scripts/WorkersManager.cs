@@ -15,7 +15,7 @@ public class WorkersManager : MonoBehaviour
     const float base_hourly_salary = 174.35f;
     #endregion
 
-    public static Action<Workers, string> replaceWorkerOnShift;
+    public static Func<Workers, string, (bool, string)> replaceWorkerOnShift;
 
     //менеджер работы с данными магазина
     [SerializeField] ShopManager shopManager;
@@ -79,6 +79,11 @@ public class WorkersManager : MonoBehaviour
     {
         databaseManager.IncreaseWorkerMotivation(worker, amount);
     }
+
+    public void UpdateWorker(Workers worker)
+    {
+        databaseManager.UpdateWorker(worker);
+    }
     #endregion
 
     private void UpdateWorkersData(List<Workers> workers)
@@ -99,13 +104,15 @@ public class WorkersManager : MonoBehaviour
         return availableWorkers;
     }
 
-    public void SendWorkerToShift(Workers worker)
+    public (bool, string) SendWorkerToShift(Workers worker)
     {
-        replaceWorkerOnShift?.Invoke(worker, "to");
+        worker.isOnShift = true;
+        return ((bool, string))(replaceWorkerOnShift?.Invoke(worker, "to"));
     }
 
     public void ReturnWorkerFromShift(Workers worker)
     {
+        worker.isOnShift = false;
         replaceWorkerOnShift?.Invoke(worker, "from");
     }
     #endregion

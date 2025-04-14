@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +15,11 @@ public class WorkDayManager : MonoBehaviour
     private ClientsCreator clientCreator;
     private Queue<Client> clientsQueue;
 
+    //работники на смене
     private List<Workers> workersOnShift;
+
+    //деньги, заработанные на смене
+    private float moneyEarned = 0f;
 
 
     private const float workDayTime = 60f;
@@ -55,12 +60,19 @@ public class WorkDayManager : MonoBehaviour
                 dayStarted = false;
 
                 clientsQueue.Clear();
+
+                workersOnShift.ForEach(w => {
+                    workersManager.UpdateWorker(w);
+                });
                 workersOnShift.Clear();
                 workersCoroutines.Clear();
+                shopManager.AddCash(moneyEarned);
+                moneyEarned = 0f;
+                Debug.Log("Day finished!");
             }
 
             var freeWorker = GetFreeWorker();
-            if(freeWorker != null)
+            if(freeWorker != null && clientsQueue.Count != 0)
             {
                 var wc = workersCoroutines[freeWorker];
                 wc.IsBuzy = true;
@@ -72,13 +84,19 @@ public class WorkDayManager : MonoBehaviour
         }
     }
 
+    private void AddCash(float amount)
+    {
+        moneyEarned += amount;
+    }
+
     private void StartAnotherDay()
     {
         
     }
 
-    private void StartWorkDay()
+    public void StartWorkDay()
     {
+        Debug.Log("Day started!");
         clientsQueue = new Queue<Client>();
         InvokeRepeating("GetClients", 0, 5);
         dayStartTime = Time.time;
@@ -86,34 +104,41 @@ public class WorkDayManager : MonoBehaviour
     }
 
 
-    private void GetCleints()
+    private void GetClients()
     {
-        if(Time.time - dayStartTime >= 10)
-        {
+        //if (Time.time - dayStartTime >= 10)
+        //{
             var clients = clientCreator.GetClients();
+            Debug.Log($"generated {clients.Count} clients");
             clients.ForEach(c =>
             {
                 clientsQueue.Enqueue(c);
             });
-        }
+        //}
     }
 
 
-    protected void ReplaceWorkerOnShift(Workers worker, string action)
+    private (bool, string) ReplaceWorkerOnShift(Workers worker, string action)
     {
-        switch(action)
+        switch (action)
         {
             case "to":
+                if (workersOnShift != null)
+                {
+                    if (workersOnShift.Count >= 2) return (false, "количество работников на смене максимально");
+                }
                 workersOnShift ??= new();
                 workersOnShift.Add(worker);
-                workersCoroutines.Add(worker, new ServeClient(worker.motivation, shopManager, flowersManager, workersManager, worker));
-                Debug.Log($"added worker {worker.name}");
-                break;
+                workersCoroutines.Add(worker, new ServeClient(worker.motivation, shopManager, flowersManager, workersManager, worker, AddCash));
+                return (true, "");
 
             case "from":
                 workersOnShift?.Remove(worker);
                 workersCoroutines.Remove(worker);
-                break;
+                return (true, "");
+
+            default:
+                return (false, "нет таких параметров");
         }
     }
 
@@ -140,6 +165,8 @@ public class WorkDayManager : MonoBehaviour
         private ShopManager shopManager;
         private FlowersManager flowersManager;
         private WorkersManager workersManager;
+
+        private Action<float> addCash;
 
         public bool IsBuzy
         {
@@ -172,18 +199,23 @@ public class WorkDayManager : MonoBehaviour
             var satisfaction = partOfSatisfaction - (partOfSatisfaction * (percent / 100));
             client.Satisfaction = satisfaction;
 
-            shopManager.AddCash(flowerPrice);
+            //shopManager.AddCash(flowerPrice);
             flowersManager.SpendFlower(client.FlowerWants);
+            addCash(flowerPrice);
 
             var satisfactionPercent = (satisfaction - minSatisfaction) / (maxSatisfaction - minSatisfaction);
 
             if(satisfactionPercent < 25)
             {
-                workersManager.DecreaseWorkerMotivation(worker, 10f);
+                worker.motivation -= 10f;
+                //workersManager.DecreaseWorkerMotivation(worker, 10f);
             }else if(satisfactionPercent > 75)
             {
-                workersManager.IncreaseWorkerMotivation(worker, 10f);
+                worker.motivation += 10f;
+                //workersManager.IncreaseWorkerMotivation(worker, 10f);
             }
+
+            Debug.Log(satisfaction);
             return false;
         }
 
@@ -192,7 +224,7 @@ public class WorkDayManager : MonoBehaviour
             throw new System.NotImplementedException();
         }
 
-        public ServeClient(float workerMotivation, ShopManager sm, FlowersManager fm, WorkersManager wm, Workers w)
+        public ServeClient(float workerMotivation, ShopManager sm, FlowersManager fm, WorkersManager wm, Workers w, Action<float> addCash)
         {
             duration = baseServiceTime * ((100 - workerMotivation) / 10);
             isBuzy = false;
@@ -202,6 +234,7 @@ public class WorkDayManager : MonoBehaviour
             flowersManager = fm;
             workersManager = wm;
             worker = w;
+            this.addCash = addCash;
         }
     }
 }

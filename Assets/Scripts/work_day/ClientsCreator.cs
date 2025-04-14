@@ -12,7 +12,7 @@ public class ClientsCreator
     const float up = 3f;
 
 
-    private string[] flowerNames;
+    private string[] flowerNames = {"Ландыш", "Пион" };
 
     public ClientsCreator(ShopManager shopManager, FlowersManager flowersManager)
     {

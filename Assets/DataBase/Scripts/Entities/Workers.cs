@@ -17,4 +17,7 @@ public class Workers
 
     [Ignore]
     public float hour_salary { get; set; }
+
+    [Ignore]
+    public bool isOnShift { get; set; }
 }

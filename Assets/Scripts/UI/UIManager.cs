@@ -36,6 +36,7 @@ public class UIManager : MonoBehaviour
 
     //панели для начала рабочего дня
     [SerializeField] GameObject shiftWorkersPanel;
+    [SerializeField] GameObject shiftWorkersListPanel;
 
 
     //менеджер базы данных
@@ -448,7 +449,8 @@ public class UIManager : MonoBehaviour
         RemoveCards(shiftWorkersCards);
         shiftWorkersCards = new();
 
-        workers.ForEach(worker =>
+
+        workers.FindAll(w => !w.isOnShift).ForEach(worker =>
         {
             GameObject workerCard = Instantiate(shiftWorkersListObject, shiftWorkersListContent.transform);
             shiftWorkersCards.Add(workerCard);
@@ -483,7 +485,17 @@ public class UIManager : MonoBehaviour
             {
                 if(float.Parse(input) >= worker.minimal_hour_salary)
                 {
-                    workersManager.SendWorkerToShift(worker);
+                    var (isShifted, status) = workersManager.SendWorkerToShift(worker);
+                    salaryForWorkerSettingPanel.SetActive(false);
+                    if (isShifted)
+                    {
+                        ReloadPanel(shiftWorkersListPanel);
+                    }
+                    else
+                    {
+                        ShowMessage(status, shiftWorkersListPanel);
+                    }
+                    
                 }
                 else
                 {
