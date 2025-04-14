@@ -8890,7 +8890,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shopManager: {fileID: 1346466767}
   flowersManager: {fileID: 1346466766}
-  workersManager: {fileID: 0}
+  workersManager: {fileID: 1346466768}
 --- !u!1 &1356240125
 GameObject:
   m_ObjectHideFlags: 0
