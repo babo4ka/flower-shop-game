@@ -117,6 +117,11 @@ public class FlowersManager : MonoBehaviour
         return flowersPrices;
     }
 
+    public bool HasFlower(string flowerName)
+    {
+        return dataBaseManager.HasFlower(flowerName);
+    }
+
     public float GetFlowerPriceByName(string flowerName)
     {
         foreach(var flower in flowersPrices){

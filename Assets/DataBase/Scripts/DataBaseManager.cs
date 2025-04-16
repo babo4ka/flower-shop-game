@@ -170,6 +170,7 @@ public class DataBaseManager : MonoBehaviour
 
 
     #region методы получения данных
+    //ЦВЕТЫ
     private void GetFlowersPrice()
     {
         List<FlowerNames> names = _dbConnection.Query<FlowerNames>("select flowers.name as flower_name from flowers");
@@ -202,11 +203,23 @@ public class DataBaseManager : MonoBehaviour
         updateShopFlowersData?.Invoke(shopFlowers);
     }
 
+    public bool HasFlower(string flowerName)
+    {
+        var flowers = _dbConnection.Query<ShopFlowers>($"select * from shop_flowers where flower_name = \"{flowerName}\"");
+        if(flowers.Count() == 0) return false;
+
+        if(flowers.First().count_on_sale == 0) return false;
+
+        return true;
+    }
+
+    //МАГАЗИН
     private void GetShopData()
     {
         updateShopData?.Invoke(_dbConnection.Query<Shop>("select * from shop").First());
     }
 
+    //ПЕРСОНАЛ
     private void GetWorkersData()
     {
         updateWorkersData?.Invoke(_dbConnection.Query<Workers>("select * from workers"));

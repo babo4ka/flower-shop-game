@@ -30,7 +30,7 @@ public class WorkDayManager : MonoBehaviour
 
     private bool dayStarted = false;
 
-    private Dictionary<Workers, ServeClient> workersCoroutines = new();
+    private readonly Dictionary<Workers, ServeClient> workersCoroutines = new();
     
     private Workers GetFreeWorker()
     {
@@ -63,12 +63,22 @@ public class WorkDayManager : MonoBehaviour
             var freeWorker = GetFreeWorker();
             if(freeWorker != null && clientsQueue.Count != 0)
             {
-                var wc = workersCoroutines[freeWorker];
-                wc.IsBuzy = true;
+                
                 var client = clientsQueue.Dequeue();
-                wc.Client = client;
-                wc.FlowerPrice = flowersManager.GetShopFlowerPriceByName(client.FlowerWants);
-                StartCoroutine(wc);
+                if (!flowersManager.HasFlower(client.FlowerWants))
+                {
+                    client.Satisfaction = 0;
+                    if (freeWorker.motivation < 5) freeWorker.motivation = 0;
+                    else freeWorker.motivation -= 5f;
+                }
+                else
+                {
+                    var wc = workersCoroutines[freeWorker];
+                    wc.IsBuzy = true;
+                    wc.Client = client;
+                    wc.FlowerPrice = flowersManager.GetShopFlowerPriceByName(client.FlowerWants);
+                    StartCoroutine(wc);
+                }
             }
         }
     }
@@ -87,7 +97,7 @@ public class WorkDayManager : MonoBehaviour
     {
         Debug.Log("Day started!");
         clientsQueue = new Queue<Client>();
-        InvokeRepeating("GetClients", 0, 5);
+        InvokeRepeating(nameof(GetClients), 0, 5);
         dayStartTime = Time.time;
         dayStarted = true;
     }
@@ -116,7 +126,7 @@ public class WorkDayManager : MonoBehaviour
 
     private void GetClients()
     {
-        //if (Time.time - dayStartTime >= 10)
+        //if (Time.time - dayStartTime <= workDayTime - 10)
         //{
             var clients = clientCreator.GetClients();
             Debug.Log($"generated {clients.Count} clients");
@@ -139,7 +149,7 @@ public class WorkDayManager : MonoBehaviour
                 }
                 workersOnShift ??= new();
                 workersOnShift.Add(worker);
-                workersCoroutines.Add(worker, new ServeClient(worker.motivation, shopManager, flowersManager, workersManager, worker, AddCash));
+                workersCoroutines.Add(worker, new ServeClient(flowersManager, worker, AddCash));
                 return (true, "");
 
             case "from":
@@ -158,8 +168,6 @@ public class WorkDayManager : MonoBehaviour
     {
         //длительность обслуживания клиента работником
         private float duration;
-        //мотивация работника
-        private float workerMotivation;
         //занят ли работник
         private bool isBuzy;
         //цена цветка
@@ -167,16 +175,14 @@ public class WorkDayManager : MonoBehaviour
         //клиент, которого обслуживают
         private Client client;
         //работник
-        private Workers worker;
+        private readonly Workers worker;
 
         //базовое время обслуживания клиентов
         private const float baseServiceTime = .5f;
 
-        private ShopManager shopManager;
-        private FlowersManager flowersManager;
-        private WorkersManager workersManager;
+        private readonly FlowersManager flowersManager;
 
-        private Action<float> addCash;
+        private readonly Action<float> addCash;
 
         public bool IsBuzy
         {
@@ -197,32 +203,43 @@ public class WorkDayManager : MonoBehaviour
         }
 
         private const float maxSatisfaction = 150;
-        private const float minSatisfaction = 12.5f;
 
         public object Current => new WaitForSeconds(duration);
 
         public bool MoveNext()
         {
             isBuzy = false;
-            var partOfSatisfaction = workerMotivation * client.GetPriceSatisfaction(flowerPrice);
+            var partOfSatisfaction = worker.motivation * client.GetPriceSatisfaction(flowerPrice);
             var percent = duration / baseServiceTime * 10;
             var satisfaction = partOfSatisfaction - (partOfSatisfaction * (percent / 100));
             client.Satisfaction = satisfaction;
 
-            flowersManager.SpendFlower(client.FlowerWants);
-            addCash(flowerPrice);
-
-            var satisfactionPercent = (satisfaction - minSatisfaction) / (maxSatisfaction - minSatisfaction);
-
-            if(satisfactionPercent < 25)
+            if(satisfaction >= 0)
             {
-                worker.motivation -= 5f;
-            }else if(satisfactionPercent > 75)
-            {
-                worker.motivation += 5f;
+                flowersManager.SpendFlower(client.FlowerWants);
+                addCash(flowerPrice);
+
+                var satisfactionPercent = satisfaction / maxSatisfaction;
+
+                if (satisfactionPercent < 35)
+                {
+                    if (worker.motivation < 5) worker.motivation = 0;
+                    else worker.motivation -= 5f;
+                }
+                else if (satisfactionPercent > 75)
+                {
+                    if (worker.motivation > 95) worker.motivation = 100;
+                    else worker.motivation += 5f;
+                }
             }
-
-            Debug.Log(satisfaction);
+            else
+            {
+                if (worker.motivation < 5) worker.motivation = 0;
+                else worker.motivation -= 5f;
+            }
+            
+            duration = baseServiceTime * ((100 - worker.motivation) / 10);
+            Debug.Log($"client satisfaction = {satisfaction}");
             return false;
         }
 
@@ -231,15 +248,12 @@ public class WorkDayManager : MonoBehaviour
             throw new System.NotImplementedException();
         }
 
-        public ServeClient(float workerMotivation, ShopManager sm, FlowersManager fm, WorkersManager wm, Workers w, Action<float> addCash)
+        public ServeClient(FlowersManager fm, Workers w, Action<float> addCash)
         {
-            duration = baseServiceTime * ((100 - workerMotivation) / 10);
+            duration = baseServiceTime * ((100 - w.motivation) / 10);
             isBuzy = false;
-            this.workerMotivation = workerMotivation;
 
-            shopManager = sm;
             flowersManager = fm;
-            workersManager = wm;
             worker = w;
             this.addCash = addCash;
         }

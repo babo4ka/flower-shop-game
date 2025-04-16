@@ -37,7 +37,7 @@ public class WorkersManager : MonoBehaviour
     //метод для генерации списка сотрудников, доступных для найма
     private void GenerateWorkers()
     {
-        if(availableWorkers is not null) availableWorkers.Clear();
+        availableWorkers?.Clear();
         availableWorkers = new();
 
 
@@ -106,6 +106,7 @@ public class WorkersManager : MonoBehaviour
 
     public (bool, string) SendWorkerToShift(Workers worker)
     {
+        if (worker.motivation <= 20) return (false, "у работника не хватает мотивации!");
         worker.isOnShift = true;
         return ((bool, string))(replaceWorkerOnShift?.Invoke(worker, "to"));
     }

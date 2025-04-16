@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         StartCoroutine(WaitForDbReady());
-        Debug.Log(float.Parse("14.33"));
     }
 
     void StartAnotherDay()
