@@ -14,4 +14,6 @@ public class Flowers
 
     public float market_price { get; set; }
     public float noise { get; set; }
+
+    public int popularity_step { get; set; }
 }

@@ -12,6 +12,8 @@ public class WorkDayManager : MonoBehaviour
     //менеджер для работы с данынми работников
     [SerializeField] WorkersManager workersManager;
 
+    public static Action startAnnotherDay;
+
     private ClientsCreator clientCreator;
     private Queue<Client> clientsQueue;
 
@@ -22,7 +24,7 @@ public class WorkDayManager : MonoBehaviour
     private float moneyEarned = 0f;
 
 
-    private const float workDayTime = 60f;
+    private const float workDayTime = 10f;
 
     private float dayStartTime = 0f;
 
@@ -55,20 +57,7 @@ public class WorkDayManager : MonoBehaviour
         if(dayStarted)
         {
             if(Time.time - dayStartTime >= workDayTime) {
-                CancelInvoke();
-                dayStartTime = -1f;
-                dayStarted = false;
-
-                clientsQueue.Clear();
-
-                workersOnShift.ForEach(w => {
-                    workersManager.UpdateWorker(w);
-                });
-                workersOnShift.Clear();
-                workersCoroutines.Clear();
-                shopManager.AddCash(moneyEarned);
-                moneyEarned = 0f;
-                Debug.Log("Day finished!");
+                FinishWorkDay();
             }
 
             var freeWorker = GetFreeWorker();
@@ -91,7 +80,7 @@ public class WorkDayManager : MonoBehaviour
 
     private void StartAnotherDay()
     {
-        
+        startAnnotherDay?.Invoke();
     }
 
     public void StartWorkDay()
@@ -101,6 +90,27 @@ public class WorkDayManager : MonoBehaviour
         InvokeRepeating("GetClients", 0, 5);
         dayStartTime = Time.time;
         dayStarted = true;
+    }
+
+    private void FinishWorkDay()
+    {
+        CancelInvoke();
+        dayStartTime = -1f;
+        dayStarted = false;
+
+        clientsQueue.Clear();
+
+        workersOnShift.ForEach(w => {
+            w.isOnShift = false;
+            workersManager.UpdateWorker(w);
+        });
+        workersOnShift.Clear();
+        workersCoroutines.Clear();
+        shopManager.AddCash(moneyEarned);
+        moneyEarned = 0f;
+        shopManager.IncreaseDay();
+        flowersManager.UpdateFlwoersPopularityStory();
+        Debug.Log("Day finished!");
     }
 
 
@@ -199,7 +209,6 @@ public class WorkDayManager : MonoBehaviour
             var satisfaction = partOfSatisfaction - (partOfSatisfaction * (percent / 100));
             client.Satisfaction = satisfaction;
 
-            //shopManager.AddCash(flowerPrice);
             flowersManager.SpendFlower(client.FlowerWants);
             addCash(flowerPrice);
 
@@ -207,12 +216,10 @@ public class WorkDayManager : MonoBehaviour
 
             if(satisfactionPercent < 25)
             {
-                worker.motivation -= 10f;
-                //workersManager.DecreaseWorkerMotivation(worker, 10f);
+                worker.motivation -= 5f;
             }else if(satisfactionPercent > 75)
             {
-                worker.motivation += 10f;
-                //workersManager.IncreaseWorkerMotivation(worker, 10f);
+                worker.motivation += 5f;
             }
 
             Debug.Log(satisfaction);

@@ -141,6 +141,12 @@ public class FlowersManager : MonoBehaviour
 
         return -1f;
     }
+
+
+    public void UpdateFlwoersPopularityStory()
+    {
+        dataBaseManager.UpdateFlowersPopulartityStory();
+    }
     #endregion
 
 }

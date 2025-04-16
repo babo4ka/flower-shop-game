@@ -34,6 +34,7 @@ public class DataBaseManager : MonoBehaviour
         GetShopFlowersData();
         GetFlowersPrice();
         GetWorkersData();
+        //UpdateFlowers();
         //GetFlowersDataToCheck();
         //CreateInitialPopularityPatterns();
         //CreateInitialFlowers();
@@ -128,16 +129,16 @@ public class DataBaseManager : MonoBehaviour
     {
         var flowersList = new List<Flowers>
         {
-            new() { name = "Роза", popularity_pattern = 3, popularity_coefficient = 1.14f, market_price = 50.0f, noise = 0.15f },
-            new() { name = "Тюльпан", popularity_pattern = 2, popularity_coefficient = 2.45f, market_price = 35.5f, noise = 0.22f },
-            new() { name = "Ландыш", popularity_pattern = 5, popularity_coefficient = 1.87f, market_price = 45.3f, noise = 0.18f },
-            new() { name = "Пион", popularity_pattern = 1, popularity_coefficient = 3.12f, market_price = 120.7f, noise = 0.55f },
-            new() { name = "Орхидея", popularity_pattern = 4, popularity_coefficient = 2.78f, market_price = 90.2f, noise = 0.42f },
-            new() { name = "Гвоздика", popularity_pattern = 3, popularity_coefficient = 1.56f, market_price = 25.8f, noise = 0.30f },
-            new() { name = "Лилия", popularity_pattern = 2, popularity_coefficient = 2.90f, market_price = 60.4f, noise = 0.25f },
-            new() { name = "Гербера", popularity_pattern = 5, popularity_coefficient = 1.23f, market_price = 40.6f, noise = 0.12f },
-            new() { name = "Хризантема", popularity_pattern = 1, popularity_coefficient = 3.45f, market_price = 85.9f, noise = 0.48f },
-            new() { name = "Ирис", popularity_pattern = 4, popularity_coefficient = 2.10f, market_price = 55.0f, noise = 0.33f }
+            new() { name = "Роза", popularity_pattern = 3, popularity_coefficient = 1.14f, market_price = 50.0f, noise = 0.15f, popularity_step = 15 },
+            new() { name = "Тюльпан", popularity_pattern = 2, popularity_coefficient = 2.45f, market_price = 35.5f, noise = 0.22f, popularity_step = 15 },
+            new() { name = "Ландыш", popularity_pattern = 5, popularity_coefficient = 1.87f, market_price = 45.3f, noise = 0.18f, popularity_step = 15 },
+            new() { name = "Пион", popularity_pattern = 1, popularity_coefficient = 3.12f, market_price = 120.7f, noise = 0.55f, popularity_step = 15 },
+            new() { name = "Орхидея", popularity_pattern = 4, popularity_coefficient = 2.78f, market_price = 90.2f, noise = 0.42f, popularity_step = 15 },
+            new() { name = "Гвоздика", popularity_pattern = 3, popularity_coefficient = 1.56f, market_price = 25.8f, noise = 0.30f, popularity_step = 15 },
+            new() { name = "Лилия", popularity_pattern = 2, popularity_coefficient = 2.90f, market_price = 60.4f, noise = 0.25f, popularity_step = 15 },
+            new() { name = "Гербера", popularity_pattern = 5, popularity_coefficient = 1.23f, market_price = 40.6f, noise = 0.12f, popularity_step = 15 },
+            new() { name = "Хризантема", popularity_pattern = 1, popularity_coefficient = 3.45f, market_price = 85.9f, noise = 0.48f, popularity_step = 15 },
+            new() { name = "Ирис", popularity_pattern = 4, popularity_coefficient = 2.10f, market_price = 55.0f, noise = 0.33f, popularity_step = 15 }
         };
 
         foreach (var f in flowersList)
@@ -146,6 +147,17 @@ public class DataBaseManager : MonoBehaviour
         }
     }
 
+    private void UpdateFlowers()
+    {
+        var flo = _dbConnection.Query<Flowers>("select * from flowers");
+        flo.ForEach(f =>
+        {
+            f.popularity_step = 15;
+            _dbConnection.Update(f);
+        });
+
+
+    }
     //создание записи в сущности shop
     private void CreateInitialShopData()
     {
@@ -204,6 +216,7 @@ public class DataBaseManager : MonoBehaviour
 
     #region методы изменения данных
 
+    //ЦВЕТЫ
     public void BuyFlower(string flowerName, int count, float sum)
     {
         string getFlowerInfoForQuery = $"select * from shop_flowers where flower_name = \"{flowerName}\"";
@@ -267,6 +280,37 @@ public class DataBaseManager : MonoBehaviour
         updateShopFlowersData?.Invoke(_dbConnection.Query<ShopFlowers>("select * from shop_flowers"));
     }
 
+    public void SpendFlower(string flowerName)
+    {
+        ShopFlowers flower = _dbConnection.Query<ShopFlowers>($"select * from shop_flowers where flower_name = \"{flowerName}\"").First();
+
+        flower.count_on_sale--;
+        _dbConnection.Update(flower);
+        updateShopFlowersData?.Invoke(_dbConnection.Query<ShopFlowers>("select * from shop_flowers"));
+    }
+
+    public void UpdateFlowersPopulartityStory()
+    {
+        var flowers = _dbConnection.Query<Flowers>("select * from flowers");
+
+        flowers.ForEach(flower =>
+        {
+            var pattern = _dbConnection.Query<PopularityPatterns>($"select * from popularity_patterns where id = {flower.popularity_pattern}").First();
+            var pattern_parts = pattern.pattern.Split("-").Select(pp => float.Parse(pp, CultureInfo.InvariantCulture.NumberFormat)).ToList();
+            var story = _dbConnection.Query<PopularityStory>($"select * from popularity_story where flower_name = \"{flower.name}\"");
+            _dbConnection.Delete(story.First());
+            flower.popularity_step = flower.popularity_step == 15? 1:flower.popularity_step+1;
+
+            float newLevel = UnityEngine.Random.Range(0f, 1f) >= 0.7 ? UnityEngine.Random.Range(0f, 100f) : pattern_parts[flower.popularity_step - 1];
+
+            PopularityStory newStory = new PopularityStory() { flower_name = flower.name, popularity_level = newLevel };
+
+            _dbConnection.Update(flower);
+            _dbConnection.Insert(newStory);
+        });
+    }
+
+    //ПЕРСОНАЛ
     public void HireWorker(Workers worker)
     {
         _dbConnection.Insert(worker);
@@ -299,6 +343,7 @@ public class DataBaseManager : MonoBehaviour
         updateWorkersData?.Invoke(_dbConnection.Query<Workers>("select * from workers"));
     }
 
+    //МАГАЗИН
     public void AddCash(float amount)
     {
         var shop = _dbConnection.Query<Shop>("select * from shop").First();
@@ -308,14 +353,14 @@ public class DataBaseManager : MonoBehaviour
         updateShopData?.Invoke(shop);
     }
 
-    public void SpendFlower(string flowerName)
+    public void IncreaseDay()
     {
-        ShopFlowers flower = _dbConnection.Query<ShopFlowers>($"select * from shop_flowers where flower_name = \"{flowerName}\"").First();
-
-        flower.count_on_sale--;
-        _dbConnection.Update(flower);
-        updateShopFlowersData?.Invoke(_dbConnection.Query<ShopFlowers>("select * from shop_flowers"));
+        var shop = _dbConnection.Query<Shop>("select * from shop").First();
+        shop.daysGone++;
+        _dbConnection.Update(shop);
+        updateShopData?.Invoke(shop);
     }
+
 
     public enum ToggleSaleAction{
         PUT, REMOVE

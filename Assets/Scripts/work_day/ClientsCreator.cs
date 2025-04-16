@@ -16,17 +16,16 @@ public class ClientsCreator
 
     const float up = 3f;
 
-
-    private string[] flowerNames = {"Ландыш", "Пион" };
-
     public ClientsCreator(ShopManager shopManager, FlowersManager flowersManager)
     {
         this.shopManager = shopManager;
-        this.flowersManager = flowersManager;   
+        this.flowersManager = flowersManager;
+        WorkDayManager.startAnnotherDay += UpdateInfo;
     }
 
     private void UpdateInfo()
     {
+        Debug.Log("updating info");
         flowersPrices = flowersManager.GetFlowersPrice();
         flowersChanceRanges ??= new Dictionary<FlowersPrice, (float, float)>();
 
@@ -70,8 +69,6 @@ public class ClientsCreator
         for (int i = 0; i < clientsCount; i++)
         {
             var (flowerWants, flowerPrice) = GetFlower();
-           /* string flowerWants = flowerNames[Random.Range(0, flowerNames.Length)];
-            float flowerPrice = flowersManager.GetFlowerPriceByName(flowerWants);*/
             clients.Add(new Client(flowerWants, flowerPrice + (flowerPrice * (up * shopManager.CurrentRating()/ 100)), flowerPrice));
         }
 

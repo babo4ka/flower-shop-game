@@ -31,6 +31,10 @@ public class ShopManager : MonoBehaviour
         dataBaseManager.AddCash(amount);
     }
 
+    public void IncreaseDay()
+    {
+        dataBaseManager.IncreaseDay();
+    }
     #endregion
 
 
