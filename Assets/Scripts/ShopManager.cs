@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ShopManager : MonoBehaviour
@@ -34,6 +35,11 @@ public class ShopManager : MonoBehaviour
     public void IncreaseDay()
     {
         dataBaseManager.IncreaseDay();
+    }
+
+    public List<WorkDays> GetStats()
+    {
+        return dataBaseManager.GetStats();
     }
     #endregion
 

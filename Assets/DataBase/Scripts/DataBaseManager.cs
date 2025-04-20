@@ -224,6 +224,14 @@ public class DataBaseManager : MonoBehaviour
     {
         updateWorkersData?.Invoke(_dbConnection.Query<Workers>("select * from workers"));
     }
+
+
+    //—“¿“»—“» ¿
+    public List<WorkDays> GetStats()
+    {
+
+        return _dbConnection.Query<WorkDays>("select * from work_days");
+    }
     #endregion
 
 
@@ -374,6 +382,12 @@ public class DataBaseManager : MonoBehaviour
         updateShopData?.Invoke(shop);
     }
 
+    //—“¿“»—“» ¿
+    public void CountStats(int flowersSold, float money_earned, int clientsCount, float averageClientsSatisfaction)
+    {
+        _dbConnection.Insert(new WorkDays() { flowers_sold = flowersSold, money_earned = money_earned, 
+            clients_count = clientsCount, average_clients_motivation = averageClientsSatisfaction });
+    }
 
     public enum ToggleSaleAction{
         PUT, REMOVE

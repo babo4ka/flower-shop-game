@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -16,6 +17,9 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region переменные из редактора
+    //активная панель
+    [SerializeField] GameObject activePanel;
+
     //панель с отображением денег
     [SerializeField] TMP_Text cashTxt;
     [SerializeField] TMP_Text daysTxt;
@@ -45,6 +49,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] FlowersManager flowersManager;
     //менеджер для работы с работниками
     [SerializeField] WorkersManager workersManager;
+    //менеджер для работы с магазином
+    [SerializeField] ShopManager shopManager;
 
     //панели для рынка с цветами
     [SerializeField] GameObject flowersListOnMarketContent;
@@ -108,6 +114,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] TMP_InputField changeFlowerPriceInput;
     [SerializeField] TMP_InputField toggleFlowersOnSaleInput;
 
+    //статистика
+    [SerializeField] GameObject statsAfterShiftPanel;
+    [SerializeField] TMP_Text[] textForStats;
+
+    //статистика
+    [SerializeField] GameObject fullStatsPanel;
+    [SerializeField] TMP_Text[] textForFullStats;
+
     //баннер для отображения информации
     [SerializeField] GameObject messageBanner;
     #endregion
@@ -116,16 +130,15 @@ public class UIManager : MonoBehaviour
     //метод для переключения панели цветов
     public void ToggleFlowersSettingsPanel()
     {
-        
         if(flowersSettingsPanel.activeInHierarchy)
         {
             flowersSettingsPanel.SetActive(false);
         }
         else
         {
+            if(activePanel != null) activePanel.SetActive(false);
             flowersSettingsPanel.SetActive(true);
-            workersPanel.SetActive(false);
-            shiftWorkersPanel.SetActive(false);
+            activePanel = flowersSettingsPanel;
         }
     }
 
@@ -154,9 +167,9 @@ public class UIManager : MonoBehaviour
         }
         else
         {
+            if (activePanel != null) activePanel.SetActive(false);
             workersPanel.SetActive(true);
-            flowersSettingsPanel.SetActive(false);
-            shiftWorkersPanel.SetActive(false);
+            activePanel = workersPanel;
         }
     }
 
@@ -182,9 +195,28 @@ public class UIManager : MonoBehaviour
         }
         else
         {
+            if (activePanel != null) activePanel.SetActive(false);
             shiftWorkersPanel.SetActive(true);
-            workersPanel.SetActive(false);
-            flowersSettingsPanel.SetActive(false);
+            activePanel = shiftWorkersPanel;
+        }
+    }
+
+    public void ToggleStatsAfterShiftPanel()
+    {
+        if(statsAfterShiftPanel.activeInHierarchy) statsAfterShiftPanel.SetActive(false);
+    }
+
+    public void ToggleFullStatsPanel()
+    {
+        if (fullStatsPanel.activeInHierarchy)
+        {
+            fullStatsPanel.SetActive(false);
+        }
+        else
+        {
+            if (activePanel != null) activePanel.SetActive(false);
+            fullStatsPanel.SetActive(true);
+            activePanel = fullStatsPanel;
         }
     }
     #endregion
@@ -197,6 +229,8 @@ public class UIManager : MonoBehaviour
         workersListOnMarketContent.GetComponent<OnEnableEvent>().enabled += GetWorkersOnMarketList;
         hiredWorkersListContent.GetComponent<OnEnableEvent>().enabled += GetHiredWorkersList;
         shiftWorkersListContent.GetComponent<OnEnableEvent>().enabled += GetShiftWorkersList;
+        WorkDayManager.statisticsShow += ShowStatisticsAfterShift;
+        fullStatsPanel.GetComponent<OnEnableEvent>().enabled += ShowFullStats;
     }
 
     #region методы для отображения и изменения информации о цветах
@@ -250,6 +284,7 @@ public class UIManager : MonoBehaviour
         var buyBtn = buyFlowerPanel.transform.Find("BuyBtn").GetComponent<Button>();
 
         countInput.onValueChanged.RemoveAllListeners();
+        countInput.text = "";
         
 
         countInput.onValueChanged.AddListener((input) => {
@@ -341,6 +376,7 @@ public class UIManager : MonoBehaviour
                 countFlowersOnSaleTxt.text = $"Количество в продаже: {flower.count_on_sale}";
                 countFlowersInStockTxt.text = $"Количество на складе: {flower.count_in_stock}";
 
+                changeFlowerPriceInput.text = "";
                 changeFlowerPriceInput.onValueChanged.RemoveAllListeners();
                 changeFlowerPriceInput.onValueChanged.AddListener(value =>
                 {
@@ -350,6 +386,8 @@ public class UIManager : MonoBehaviour
                         flowersManager.ChangeFlowerPrice(flower.flower_name, float.Parse(value));
                     });
                 });
+
+                toggleFlowersOnSaleInput.text = "";
 
                 toggleFlowersOnSaleInput.onValueChanged.RemoveAllListeners();
                 toggleFlowersOnSaleInput.onValueChanged.AddListener(value =>
@@ -476,6 +514,8 @@ public class UIManager : MonoBehaviour
         var salaryInput = salaryForWorkerSettingPanel.transform.Find("HourlySalaryInput").GetComponent<TMP_InputField>();
         var toShiftBtn = salaryForWorkerSettingPanel.transform.Find("ToShiftBtn").GetComponent<Button>();
 
+        salaryInput.text = "";
+
         salaryInput.onValueChanged.RemoveAllListeners();
 
         salaryInput.onValueChanged.AddListener((input) =>
@@ -504,6 +544,32 @@ public class UIManager : MonoBehaviour
             });
         });
     }
+    #endregion
+
+    #region методы для отображения информации статистики
+
+    public void ShowStatisticsAfterShift(StatisticsManager stats)
+    {
+        textForStats[0].text = stats.FlowersSold.ToString();
+        textForStats[1].text = stats.ClientsCount.ToString();
+        textForStats[2].text = stats.AverageSatisfaction.ToString();
+        textForStats[3].text = stats.MoneyEarned.ToString();
+
+        statsAfterShiftPanel.SetActive(true);
+    }
+
+    private void ShowFullStats()
+    {
+        var stats = shopManager.GetStats();
+        var avgSatiscation = stats.Sum(s => s.average_clients_motivation) / stats.Sum(s => s.clients_count);
+
+
+        textForFullStats[0].text = stats.Sum(s => s.flowers_sold).ToString();
+        textForFullStats[1].text = stats.Sum(s => s.clients_count).ToString();
+        textForFullStats[2].text = avgSatiscation.ToString();
+        textForFullStats[3].text = stats.Sum(s=>s.money_earned).ToString();
+    }
+
     #endregion
 
     private void RemoveCards(List<GameObject> cards)

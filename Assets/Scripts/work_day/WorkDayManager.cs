@@ -11,8 +11,12 @@ public class WorkDayManager : MonoBehaviour
     [SerializeField] FlowersManager flowersManager;
     //менеджер для работы с данынми работников
     [SerializeField] WorkersManager workersManager;
+    //менеджер для работы с базой данных
+    [SerializeField] DataBaseManager dataBaseManager;
 
     public static Action startAnnotherDay;
+
+    public static Action<StatisticsManager> statisticsShow;
 
     private ClientsCreator clientCreator;
     private Queue<Client> clientsQueue;
@@ -31,6 +35,8 @@ public class WorkDayManager : MonoBehaviour
     private bool dayStarted = false;
 
     private readonly Dictionary<Workers, ServeClient> workersCoroutines = new();
+
+    private StatisticsManager statsManager;
     
     private Workers GetFreeWorker()
     {
@@ -83,9 +89,20 @@ public class WorkDayManager : MonoBehaviour
         }
     }
 
+    private void SpendFlower(string flowerName)
+    {
+        flowersManager.SpendFlower(flowerName);
+    }
+
     private void AddCash(float amount)
     {
         moneyEarned += amount;
+    }
+
+    private void CountStats(float satisfaction)
+    {
+        statsManager.PlusFlower();
+        statsManager.AddClient(satisfaction);
     }
 
     private void StartAnotherDay()
@@ -95,6 +112,7 @@ public class WorkDayManager : MonoBehaviour
 
     public void StartWorkDay()
     {
+        statsManager = new StatisticsManager(dataBaseManager);
         Debug.Log("Day started!");
         clientsQueue = new Queue<Client>();
         InvokeRepeating(nameof(GetClients), 0, 5);
@@ -105,6 +123,11 @@ public class WorkDayManager : MonoBehaviour
     private void FinishWorkDay()
     {
         CancelInvoke();
+        statsManager.MoneyEarned = moneyEarned;
+        
+        statisticsShow?.Invoke(statsManager);
+        statsManager.CountInfo();
+
         dayStartTime = -1f;
         dayStarted = false;
 
@@ -149,7 +172,7 @@ public class WorkDayManager : MonoBehaviour
                 }
                 workersOnShift ??= new();
                 workersOnShift.Add(worker);
-                workersCoroutines.Add(worker, new ServeClient(flowersManager, worker, AddCash));
+                workersCoroutines.Add(worker, new ServeClient(flowersManager, worker, AddCash, SpendFlower, CountStats));
                 return (true, "");
 
             case "from":
@@ -180,9 +203,9 @@ public class WorkDayManager : MonoBehaviour
         //базовое время обслуживания клиентов
         private const float baseServiceTime = .5f;
 
-        private readonly FlowersManager flowersManager;
-
         private readonly Action<float> addCash;
+        private readonly Action<string> spendFlower;
+        private readonly Action<float> countStats;
 
         public bool IsBuzy
         {
@@ -216,7 +239,7 @@ public class WorkDayManager : MonoBehaviour
 
             if(satisfaction >= 0)
             {
-                flowersManager.SpendFlower(client.FlowerWants);
+                spendFlower(client.FlowerWants);
                 addCash(flowerPrice);
 
                 var satisfactionPercent = satisfaction / maxSatisfaction;
@@ -239,6 +262,7 @@ public class WorkDayManager : MonoBehaviour
             }
             
             duration = baseServiceTime * ((100 - worker.motivation) / 10);
+            countStats(satisfaction);
             Debug.Log($"client satisfaction = {satisfaction}");
             return false;
         }
@@ -248,14 +272,14 @@ public class WorkDayManager : MonoBehaviour
             throw new System.NotImplementedException();
         }
 
-        public ServeClient(FlowersManager fm, Workers w, Action<float> addCash)
+        public ServeClient(FlowersManager fm, Workers w, Action<float> addCash, Action<string> spendFlower, Action<float> countStats)
         {
             duration = baseServiceTime * ((100 - w.motivation) / 10);
             isBuzy = false;
-
-            flowersManager = fm;
             worker = w;
             this.addCash = addCash;
+            this.spendFlower = spendFlower;
+            this.countStats = countStats;   
         }
     }
 }
