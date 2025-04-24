@@ -13,6 +13,8 @@ public class MoveScript : MonoBehaviour
     private Vector3 from;
     private Vector3 to;
 
+    [SerializeField] float backIndent = 24;
+
     private void OnMouseDown()
     {
         movingManager.AddPosition(gameObject.name);
@@ -37,7 +39,7 @@ public class MoveScript : MonoBehaviour
     {
         Debug.Log($"move {gameObject.name}");
         from = camera.transform.position;
-        to = new Vector3(transform.position.x, camera.transform.position.y, transform.position.z - 24);
+        to = new Vector3(transform.position.x, camera.transform.position.y, transform.position.z - backIndent);
         elapsedTime = 0;
     }
 
