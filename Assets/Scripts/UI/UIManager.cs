@@ -23,6 +23,7 @@ public class UIManager : MonoBehaviour
     //панель с отображением денег
     [SerializeField] TMP_Text cashTxt;
     [SerializeField] TMP_Text daysTxt;
+    [SerializeField] TMP_Text ratingTxt;
 
     //основные панели дл€ взаимодействи€ с цветами
     [SerializeField] GameObject flowersSettingsPanel;
@@ -602,6 +603,7 @@ public class UIManager : MonoBehaviour
     {
         cashTxt.text = $"{shop.cash} $";
         daysTxt.text = $"ƒней прошло: {shop.daysGone}";
+        ratingTxt.text = $"{shop.rating}";
     }
     #endregion
 

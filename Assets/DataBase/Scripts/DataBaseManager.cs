@@ -385,8 +385,48 @@ public class DataBaseManager : MonoBehaviour
     //—“¿“»—“» ¿
     public void CountStats(int flowersSold, float money_earned, int clientsCount, float averageClientsSatisfaction)
     {
-        _dbConnection.Insert(new WorkDays() { flowers_sold = flowersSold, money_earned = money_earned, 
-            clients_count = clientsCount, average_clients_motivation = averageClientsSatisfaction });
+        var wd = new WorkDays()
+        {
+            flowers_sold = flowersSold,
+            money_earned = money_earned,
+            clients_count = clientsCount,
+            average_clients_motivation = averageClientsSatisfaction
+        };
+
+        var prev = _dbConnection.Query<WorkDays>("select * from work_days order by id desc limit 1").First();
+        var shop = _dbConnection.Query<Shop>("select * from shop").First();
+
+        if (wd.money_earned >= prev.money_earned && wd.average_clients_motivation >= prev.average_clients_motivation)
+        {
+            shop.positiveDays++;
+            if(shop.positiveDays == 5)
+            {
+                shop.rating += 1;
+                shop.positiveDays = 0;
+            }
+        }
+        else
+        {
+            if(shop.rating != 1)
+            {
+                shop.positiveDays--;
+                if(shop.positiveDays == 0)
+                {
+                    shop.rating--;
+                    shop.positiveDays = 5;
+                }
+            }
+            else
+            {
+                if(shop.positiveDays != 0) shop.positiveDays--;
+            }
+            
+        }
+
+        _dbConnection.Update(shop);
+        updateShopData?.Invoke(shop);
+
+        _dbConnection.Insert(wd);
     }
 
     public enum ToggleSaleAction{

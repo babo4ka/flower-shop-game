@@ -12,4 +12,6 @@ public class Shop
 
     public int daysGone { get; set;}
     public int rating { get; set;}
+
+    public int positiveDays {  get; set;}
 }
