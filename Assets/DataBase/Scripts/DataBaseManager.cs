@@ -40,6 +40,7 @@ public class DataBaseManager : MonoBehaviour
         //CreateInitialFlowers();
         //GetFlowersPriceToCheck();
         loaded = true;
+
     }
 
 
@@ -378,6 +379,24 @@ public class DataBaseManager : MonoBehaviour
     {
         var shop = _dbConnection.Query<Shop>("select * from shop").First();
         shop.daysGone++;
+        _dbConnection.Update(shop);
+        updateShopData?.Invoke(shop);
+    }
+
+    public void IncreaseMaxWorkers(float price)
+    {
+        var shop = _dbConnection.Query<Shop>("select * from shop").First();
+        shop.maxWorkers++;
+        shop.cash -= price;
+        _dbConnection.Update(shop);
+        updateShopData?.Invoke(shop);
+    }
+
+    public void IncreaseMaxShowCases(float price)
+    {
+        var shop = _dbConnection.Query<Shop>("select * from shop").First();
+        shop.maxShowCases++;
+        shop.cash -= price;
         _dbConnection.Update(shop);
         updateShopData?.Invoke(shop);
     }

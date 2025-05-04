@@ -14,4 +14,7 @@ public class Shop
     public int rating { get; set;}
 
     public int positiveDays {  get; set;}
+
+    public int maxWorkers { get; set;}
+    public int maxShowCases { get; set;}
 }

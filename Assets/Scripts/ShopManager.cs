@@ -11,6 +11,9 @@ public class ShopManager : MonoBehaviour
     //сущность магазина
     private Shop shop;
 
+    private const float workPlacePrice = 50;
+    private const float showCasePrice = 50;
+
     private void Awake()
     {
         DataBaseManager.updateShopData += UpdateShopData;
@@ -37,9 +40,26 @@ public class ShopManager : MonoBehaviour
         dataBaseManager.IncreaseDay();
     }
 
-    public List<WorkDays> GetStats()
+    public bool IncreaseMaxWorkers()
     {
-        return dataBaseManager.GetStats();
+        if(shop.cash >= workPlacePrice)
+        {
+            dataBaseManager.IncreaseMaxWorkers(workPlacePrice);
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool IncreaseMaxShowCases()
+    {
+        if(shop.cash >= showCasePrice)
+        {
+            dataBaseManager.IncreaseMaxShowCases(showCasePrice);
+            return true;
+        }
+
+        return false;
     }
     #endregion
 
@@ -53,6 +73,21 @@ public class ShopManager : MonoBehaviour
     public int CurrentRating()
     {
         return shop.rating;
+    }
+
+    public int OpenedShowCases()
+    {
+        return shop.maxShowCases;
+    }
+
+    public int MaxWorkers()
+    {
+        return shop.maxWorkers;
+    }
+
+    public List<WorkDays> GetStats()
+    {
+        return dataBaseManager.GetStats();
     }
     #endregion
 }

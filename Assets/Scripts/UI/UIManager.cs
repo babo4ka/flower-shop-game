@@ -73,6 +73,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject hiredWorkersListObject;
     List<GameObject> hiredWorkersCards;
 
+    //панели для настроек магазина
+    [SerializeField] GameObject shopSettingsPanel;
+    [SerializeField] GameObject maxShowCasesPanel;
+    [SerializeField] GameObject maxWorkersPanel;
+    [SerializeField] TMP_Text shopPageNameTxt;
+    [SerializeField] Button buyShowCaseBtn;
+    [SerializeField] Button buyWorkPlaceBtn;
+
 
     //панели для работников на смену
     [SerializeField] GameObject shiftWorkersListContent;
@@ -218,6 +226,52 @@ public class UIManager : MonoBehaviour
             if (activePanel != null) activePanel.SetActive(false);
             fullStatsPanel.SetActive(true);
             activePanel = fullStatsPanel;
+        }
+    }
+
+    public void ToggleShopSettingsPanel()
+    {
+        if (shopSettingsPanel.activeInHierarchy)
+        {
+            shopSettingsPanel.SetActive(false);
+        }
+        else
+        {
+            if (activePanel != null) activePanel.SetActive(false);
+            shopSettingsPanel.SetActive(true);
+            activePanel = shopSettingsPanel;
+            TogglePanelAboutShop();
+        }
+    }
+
+    public void TogglePanelAboutShop()
+    {
+        if (maxShowCasesPanel.activeInHierarchy)
+        {
+            maxShowCasesPanel.SetActive(false);
+            maxWorkersPanel.SetActive(true);
+            shopPageNameTxt.text = "рабочие места";
+            buyWorkPlaceBtn.onClick.RemoveAllListeners();
+            buyWorkPlaceBtn.onClick.AddListener(() =>
+            {
+                bool bought = shopManager.IncreaseMaxWorkers();
+                if (!bought)
+                    ShowMessage("недостаточно средств", maxWorkersPanel);
+            });
+        }
+        else
+        {
+            maxWorkersPanel.SetActive(false);
+            maxShowCasesPanel.SetActive(true);
+            shopPageNameTxt.text = "витрины";
+
+            buyShowCaseBtn.onClick.RemoveAllListeners();
+            buyShowCaseBtn.onClick.AddListener(() =>
+            {
+                bool bought = shopManager.IncreaseMaxShowCases();
+                if (!bought)
+                    ShowMessage("недостаточно средств", maxShowCasesPanel);
+            });
         }
     }
     #endregion
