@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Serialization;
 using TMPro;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
@@ -77,12 +78,20 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject shopSettingsPanel;
     [SerializeField] GameObject maxShowCasesPanel;
     [SerializeField] GameObject maxWorkersPanel;
+    //название страницы
     [SerializeField] TMP_Text shopPageNameTxt;
+    //кнопки
     [SerializeField] Button buyShowCaseBtn;
     [SerializeField] Button buyWorkPlaceBtn;
+    //информация
+    [SerializeField] TMP_Text maxShowCasesTxt;
+    [SerializeField] TMP_Text showCasePriceTxt;
+    [SerializeField] TMP_Text maxWorkersTxt;
+    [SerializeField] TMP_Text workplacePriceTxt;
 
 
     //панели для работников на смену
+    [SerializeField] TMP_Text shiftWorkersCountTxt;
     [SerializeField] GameObject shiftWorkersListContent;
     [SerializeField] GameObject shiftWorkersListObject;
     List<GameObject> shiftWorkersCards;
@@ -251,27 +260,12 @@ public class UIManager : MonoBehaviour
             maxShowCasesPanel.SetActive(false);
             maxWorkersPanel.SetActive(true);
             shopPageNameTxt.text = "рабочие места";
-            buyWorkPlaceBtn.onClick.RemoveAllListeners();
-            buyWorkPlaceBtn.onClick.AddListener(() =>
-            {
-                bool bought = shopManager.IncreaseMaxWorkers();
-                if (!bought)
-                    ShowMessage("недостаточно средств", maxWorkersPanel);
-            });
         }
         else
         {
             maxWorkersPanel.SetActive(false);
             maxShowCasesPanel.SetActive(true);
             shopPageNameTxt.text = "витрины";
-
-            buyShowCaseBtn.onClick.RemoveAllListeners();
-            buyShowCaseBtn.onClick.AddListener(() =>
-            {
-                bool bought = shopManager.IncreaseMaxShowCases();
-                if (!bought)
-                    ShowMessage("недостаточно средств", maxShowCasesPanel);
-            });
         }
     }
     #endregion
@@ -286,6 +280,8 @@ public class UIManager : MonoBehaviour
         shiftWorkersListContent.GetComponent<OnEnableEvent>().enabled += GetShiftWorkersList;
         WorkDayManager.statisticsShow += ShowStatisticsAfterShift;
         fullStatsPanel.GetComponent<OnEnableEvent>().enabled += ShowFullStats;
+        maxWorkersPanel.GetComponent<OnEnableEvent>().enabled += WorkPlacesInfoShow;
+        maxShowCasesPanel.GetComponent<OnEnableEvent>().enabled += ShowCaseInfoShow;
     }
 
     #region методы для отображения и изменения информации о цветах
@@ -477,7 +473,6 @@ public class UIManager : MonoBehaviour
     #endregion
 
 
-
     #region методы для отображения и изменения информации о работниках
     private void GetWorkersOnMarketList()
     {
@@ -538,6 +533,7 @@ public class UIManager : MonoBehaviour
     #region методы для отображения и изменения информации о рабочем дне
     private void GetShiftWorkersList()
     {
+        shiftWorkersCountTxt.text = $"выберите не больше {shopManager.MaxWorkers()} работников на смену";
         var workers = workersManager.GetHiredWorkers();
         RemoveCards(shiftWorkersCards);
         shiftWorkersCards = new();
@@ -625,6 +621,40 @@ public class UIManager : MonoBehaviour
         textForFullStats[3].text = stats.Sum(s=>s.money_earned).ToString();
     }
 
+    #endregion
+
+    #region методы для отображения информации о магазине
+    private void ShowCaseInfoShow()
+    {
+        maxShowCasesTxt.text = $"Витрин имеется: {shopManager.OpenedShowCases()}";
+        showCasePriceTxt.text = $"цена витрины {shopManager.ShowCasePrice}";
+
+        buyShowCaseBtn.onClick.RemoveAllListeners();
+        buyShowCaseBtn.onClick.AddListener(() =>
+        {
+            bool bought = shopManager.IncreaseMaxShowCases();
+            if (!bought)
+                ShowMessage("недостаточно средств", maxShowCasesPanel);
+            else
+                ReloadPanel(maxShowCasesPanel);
+        });
+    }
+
+    private void WorkPlacesInfoShow()
+    {
+        maxWorkersTxt.text = $"рабочих мест: {shopManager.MaxWorkers()}";
+        workplacePriceTxt.text = $"цена рабочего места: {shopManager.WorkPlacePrice}";
+
+        buyWorkPlaceBtn.onClick.RemoveAllListeners();
+        buyWorkPlaceBtn.onClick.AddListener(() =>
+        {
+            bool bought = shopManager.IncreaseMaxWorkers();
+            if (!bought)
+                ShowMessage("недостаточно средств", maxWorkersPanel);
+            else
+                ReloadPanel(maxWorkersPanel);
+        });
+    }
     #endregion
 
     private void RemoveCards(List<GameObject> cards)

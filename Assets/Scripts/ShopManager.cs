@@ -12,7 +12,15 @@ public class ShopManager : MonoBehaviour
     private Shop shop;
 
     private const float workPlacePrice = 50;
+    public float WorkPlacePrice
+    {
+        get => workPlacePrice;
+    }
     private const float showCasePrice = 50;
+    public float ShowCasePrice
+    {
+        get => showCasePrice;
+    }
 
     private void Awake()
     {

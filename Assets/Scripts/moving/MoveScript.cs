@@ -12,13 +12,16 @@ public class MoveScript : MonoBehaviour
 
     private Vector3 from;
     private Vector3 to;
+    private Quaternion fromRotation;
+    private Quaternion toRotation;
 
     [SerializeField] float backIndent = 24;
+    [SerializeField] float xRotation = 30f;
 
     private void OnMouseDown()
     {
         movingManager.AddPosition(gameObject.name);
-        MoveToPos();
+        MoveToPos(1);
     }
 
     private void Awake()
@@ -31,16 +34,19 @@ public class MoveScript : MonoBehaviour
         if (pos == gameObject.name)
         {
             Debug.Log($"here! {gameObject.name}");
-            MoveToPos();
+            MoveToPos(-1);
         }
     }
 
-    private void MoveToPos()
+    private void MoveToPos(float side)
     {
-        Debug.Log($"move {gameObject.name}");
         from = camera.transform.position;
         to = new Vector3(transform.position.x, camera.transform.position.y, transform.position.z - backIndent);
+        fromRotation = camera.transform.rotation;
+        toRotation = side==1?(new Quaternion() { x = xRotation}):
+            (Quaternion.Inverse(new Quaternion() { x = xRotation}));
         elapsedTime = 0;
+        
     }
 
     private void Update()
@@ -50,6 +56,7 @@ public class MoveScript : MonoBehaviour
             elapsedTime += Time.deltaTime;
             float t = Mathf.Clamp01(elapsedTime / duration);
             camera.transform.position = Vector3.Lerp(from, to, t);
+            camera.transform.rotation = Quaternion.Lerp(fromRotation, toRotation, elapsedTime * duration/100);
         }else if (elapsedTime != -1 && elapsedTime > duration)
         {
             elapsedTime = -1;

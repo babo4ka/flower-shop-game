@@ -1603,6 +1603,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!1 &97549931 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8164078558771037576, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -1645,6 +1646,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &97549937 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -1824,6 +1826,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &118108453 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -3004,6 +3007,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &243200892 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -3415,6 +3419,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &276145266 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -3686,6 +3691,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &283787055 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -3703,7 +3709,7 @@ GameObject:
   - component: {fileID: 300947633}
   - component: {fileID: 300947632}
   m_Layer: 5
-  m_Name: ShowCasePrice
+  m_Name: WorkPlacePrice
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3870,6 +3876,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &306356646 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -4556,6 +4563,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &374743709 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -6213,6 +6221,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &504039736 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -8181,7 +8190,8 @@ MonoBehaviour:
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
   duration: 1
-  backIndent: 24
+  backIndent: 7
+  xRotation: 30
 --- !u!1 &646211519
 GameObject:
   m_ObjectHideFlags: 0
@@ -9066,6 +9076,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &709731274 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -12318,6 +12329,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &1024918308 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -12736,6 +12748,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &1040487721 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -12889,7 +12902,7 @@ GameObject:
   - component: {fileID: 1049722527}
   - component: {fileID: 1049722526}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: WorkersRestrictions
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13057,6 +13070,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &1063370910 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -15313,6 +15327,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &1170765165 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -15598,6 +15613,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &1202647028 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -17364,6 +17380,13 @@ MonoBehaviour:
   maxShowCasesPanel: {fileID: 2104981168}
   maxWorkersPanel: {fileID: 1720373814}
   shopPageNameTxt: {fileID: 3453236}
+  buyShowCaseBtn: {fileID: 1298280826}
+  buyWorkPlaceBtn: {fileID: 1699174766}
+  maxShowCasesTxt: {fileID: 2074148943}
+  showCasePriceTxt: {fileID: 1097509785}
+  maxWorkersTxt: {fileID: 1713203614}
+  workplacePriceTxt: {fileID: 300947632}
+  shiftWorkersCountTxt: {fileID: 1049722526}
   shiftWorkersListContent: {fileID: 1969934247}
   shiftWorkersListObject: {fileID: 2456190129896946806, guid: f9debffb084a0e345815ba993ceaea17, type: 3}
   salaryForWorkerSettingPanel: {fileID: 999902506}
@@ -17533,6 +17556,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &1349307142 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -18635,6 +18659,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &1432731745 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -21374,6 +21399,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &1578695760 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -21686,6 +21712,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 0
+  xRotation: 10.3
 --- !u!4 &1587853725
 Transform:
   m_ObjectHideFlags: 0
@@ -22991,6 +23018,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!1 &1648664104
 GameObject:
   m_ObjectHideFlags: 0
@@ -23751,7 +23779,7 @@ GameObject:
   - component: {fileID: 1699174767}
   - component: {fileID: 1699174766}
   m_Layer: 5
-  m_Name: BuyShowCaseBtn
+  m_Name: BuyWorkPlaceBtn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23774,7 +23802,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.039662533}
   m_AnchorMax: {x: 1, y: 0.19000001}
-  m_AnchoredPosition: {x: 0, y: -0.1655426}
+  m_AnchoredPosition: {x: 0, y: -0.16555786}
   m_SizeDelta: {x: -360.5085, y: 0.3311}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1699174766
@@ -23871,7 +23899,7 @@ GameObject:
   - component: {fileID: 1713203615}
   - component: {fileID: 1713203614}
   m_Layer: 5
-  m_Name: ShowCasesCount
+  m_Name: MaxWorkersCount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -24201,6 +24229,7 @@ GameObject:
   - component: {fileID: 1720373815}
   - component: {fileID: 1720373817}
   - component: {fileID: 1720373816}
+  - component: {fileID: 1720373818}
   m_Layer: 5
   m_Name: WorkersPanel
   m_TagString: Untagged
@@ -24268,6 +24297,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1720373814}
   m_CullTransparentMesh: 1
+--- !u!114 &1720373818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1720373814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57edcec3978ee6c4ebaaeabc740bdd59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1722036977
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -25248,6 +25289,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &1813036058 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -26660,6 +26702,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &1902501106 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -29495,6 +29538,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &2080071780 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -29542,6 +29586,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &2085734528 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -29931,6 +29976,7 @@ GameObject:
   - component: {fileID: 2104981169}
   - component: {fileID: 2104981171}
   - component: {fileID: 2104981170}
+  - component: {fileID: 2104981172}
   m_Layer: 5
   m_Name: ShowCasesPanel
   m_TagString: Untagged
@@ -29998,6 +30044,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2104981168}
   m_CullTransparentMesh: 1
+--- !u!114 &2104981172
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2104981168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57edcec3978ee6c4ebaaeabc740bdd59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2105947820
 GameObject:
   m_ObjectHideFlags: 0
@@ -30207,6 +30265,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &2111637595 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -30798,6 +30857,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
+  xRotation: 0
 --- !u!4 &2145744956 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
