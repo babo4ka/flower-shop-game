@@ -1603,7 +1603,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
-  xRotation: 0
+  xRotation: 10.3
 --- !u!1 &97549931 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8164078558771037576, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -1645,8 +1645,8 @@ MonoBehaviour:
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
   duration: 1
-  backIndent: 24
-  xRotation: 0
+  backIndent: 7
+  xRotation: 30
 --- !u!4 &97549937 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -1825,8 +1825,8 @@ MonoBehaviour:
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
   duration: 1
-  backIndent: 24
-  xRotation: 0
+  backIndent: 7
+  xRotation: 30
 --- !u!4 &118108453 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -3006,8 +3006,8 @@ MonoBehaviour:
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
   duration: 1
-  backIndent: 24
-  xRotation: 0
+  backIndent: 7
+  xRotation: 30
 --- !u!4 &243200892 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -3418,8 +3418,8 @@ MonoBehaviour:
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
   duration: 1
-  backIndent: 24
-  xRotation: 0
+  backIndent: 7
+  xRotation: 30
 --- !u!4 &276145266 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -3690,8 +3690,8 @@ MonoBehaviour:
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
   duration: 1
-  backIndent: 24
-  xRotation: 0
+  backIndent: 7
+  xRotation: 30
 --- !u!4 &283787055 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -3875,8 +3875,8 @@ MonoBehaviour:
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
   duration: 1
-  backIndent: 24
-  xRotation: 0
+  backIndent: 7
+  xRotation: 30
 --- !u!4 &306356646 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -4562,8 +4562,8 @@ MonoBehaviour:
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
   duration: 1
-  backIndent: 24
-  xRotation: 0
+  backIndent: 7
+  xRotation: 30
 --- !u!4 &374743709 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -6220,8 +6220,8 @@ MonoBehaviour:
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
   duration: 1
-  backIndent: 24
-  xRotation: 0
+  backIndent: 7
+  xRotation: 30
 --- !u!4 &504039736 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -9075,8 +9075,8 @@ MonoBehaviour:
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
   duration: 1
-  backIndent: 24
-  xRotation: 0
+  backIndent: 7
+  xRotation: 30
 --- !u!4 &709731274 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -13069,8 +13069,8 @@ MonoBehaviour:
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
   duration: 1
-  backIndent: 24
-  xRotation: 0
+  backIndent: 7
+  xRotation: 30
 --- !u!4 &1063370910 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -15326,8 +15326,8 @@ MonoBehaviour:
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
   duration: 1
-  backIndent: 24
-  xRotation: 0
+  backIndent: 7
+  xRotation: 30
 --- !u!4 &1170765165 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -15612,8 +15612,8 @@ MonoBehaviour:
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
   duration: 1
-  backIndent: 24
-  xRotation: 0
+  backIndent: 7
+  xRotation: 30
 --- !u!4 &1202647028 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -17555,8 +17555,8 @@ MonoBehaviour:
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
   duration: 1
-  backIndent: 24
-  xRotation: 0
+  backIndent: 7
+  xRotation: 30
 --- !u!4 &1349307142 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -21398,8 +21398,8 @@ MonoBehaviour:
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
   duration: 1
-  backIndent: 24
-  xRotation: 0
+  backIndent: 7
+  xRotation: 30
 --- !u!4 &1578695760 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -23018,7 +23018,7 @@ MonoBehaviour:
   movingManager: {fileID: 1346466771}
   duration: 1
   backIndent: 24
-  xRotation: 0
+  xRotation: 10.3
 --- !u!1 &1648664104
 GameObject:
   m_ObjectHideFlags: 0
@@ -25288,8 +25288,8 @@ MonoBehaviour:
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
   duration: 1
-  backIndent: 24
-  xRotation: 0
+  backIndent: 7
+  xRotation: 30
 --- !u!4 &1813036058 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -26701,8 +26701,8 @@ MonoBehaviour:
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
   duration: 1
-  backIndent: 24
-  xRotation: 0
+  backIndent: 7
+  xRotation: 30
 --- !u!4 &1902501106 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -29537,8 +29537,8 @@ MonoBehaviour:
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
   duration: 1
-  backIndent: 24
-  xRotation: 0
+  backIndent: 7
+  xRotation: 30
 --- !u!4 &2080071780 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -29585,8 +29585,8 @@ MonoBehaviour:
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
   duration: 1
-  backIndent: 24
-  xRotation: 0
+  backIndent: 7
+  xRotation: 30
 --- !u!4 &2085734528 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}
@@ -30264,8 +30264,8 @@ MonoBehaviour:
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
   duration: 1
-  backIndent: 24
-  xRotation: 0
+  backIndent: 7
+  xRotation: 30
 --- !u!4 &2111637595 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1151388028547126963, guid: a5e26988fec3b124bbd366d234673fc3, type: 3}

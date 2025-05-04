@@ -43,8 +43,7 @@ public class MoveScript : MonoBehaviour
         from = camera.transform.position;
         to = new Vector3(transform.position.x, camera.transform.position.y, transform.position.z - backIndent);
         fromRotation = camera.transform.rotation;
-        toRotation = side==1?(new Quaternion() { x = xRotation}):
-            (Quaternion.Inverse(new Quaternion() { x = xRotation}));
+        toRotation = Quaternion.Euler(xRotation, 0, 0);
         elapsedTime = 0;
         
     }
@@ -56,7 +55,7 @@ public class MoveScript : MonoBehaviour
             elapsedTime += Time.deltaTime;
             float t = Mathf.Clamp01(elapsedTime / duration);
             camera.transform.position = Vector3.Lerp(from, to, t);
-            camera.transform.rotation = Quaternion.Lerp(fromRotation, toRotation, elapsedTime * duration/100);
+            camera.transform.rotation = Quaternion.Lerp(fromRotation, toRotation, t);
         }else if (elapsedTime != -1 && elapsedTime > duration)
         {
             elapsedTime = -1;
