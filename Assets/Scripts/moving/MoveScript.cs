@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class MoveScript : MonoBehaviour
 {
@@ -20,8 +21,12 @@ public class MoveScript : MonoBehaviour
 
     private void OnMouseDown()
     {
-        movingManager.AddPosition(gameObject.name);
-        MoveToPos();
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            movingManager.AddPosition(gameObject.name);
+            MoveToPos();
+        }
+        
     }
 
     private void Awake()

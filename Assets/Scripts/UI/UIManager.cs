@@ -24,6 +24,11 @@ public class UIManager : MonoBehaviour
     //главные кнопки
     [SerializeField] GameObject mainBtnsPanel;
 
+    [SerializeField] GameObject flowersToChoosePanel;
+    [SerializeField] GameObject flowersToChooseContent;
+    List<GameObject> flowersToChooseCards;
+    [SerializeField] GameObject flowerToChooseObject;
+
     //панель с отображением денег
     [SerializeField] TMP_Text cashTxt;
     [SerializeField] TMP_Text daysTxt;
@@ -281,6 +286,28 @@ public class UIManager : MonoBehaviour
         else
             mainBtnsPanel.GetComponent<Animator>().SetBool("hide", true);
 
+        ToggleFlowersToChoosePanel();
+    }
+
+    private void ToggleFlowersToChoosePanel()
+    {
+        if (flowersToChoosePanel.activeInHierarchy)
+        {
+            RemoveCards(flowersToChooseCards);
+            flowersToChoosePanel.SetActive(false);
+        }
+        else
+        {
+            flowersToChooseCards = new();
+            flowersToChoosePanel.SetActive(true);
+            var shopFlowers = flowersManager.GetShopFlowers();
+            shopFlowers.ForEach(sf =>
+            {
+                GameObject card = Instantiate(flowerToChooseObject, flowersToChooseContent.transform);
+                card.transform.Find("FlowerNameTxt").GetComponent<TMP_Text>().text = sf.flower_name;
+                flowersToChooseCards.Add(card);
+            });
+        }
     }
     #endregion
 
