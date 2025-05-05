@@ -1601,6 +1601,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 24
   xRotation: 10.3
@@ -1644,6 +1645,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 7
   xRotation: 30
@@ -1824,6 +1826,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 7
   xRotation: 30
@@ -3005,6 +3008,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 7
   xRotation: 30
@@ -3417,6 +3421,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 7
   xRotation: 30
@@ -3689,6 +3694,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 7
   xRotation: 30
@@ -3874,6 +3880,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 7
   xRotation: 30
@@ -4561,6 +4568,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 7
   xRotation: 30
@@ -6219,6 +6227,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 7
   xRotation: 30
@@ -8189,6 +8198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 7
   xRotation: 30
@@ -9074,6 +9084,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 7
   xRotation: 30
@@ -12327,6 +12338,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 24
   xRotation: 0
@@ -12746,6 +12758,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 24
   xRotation: 0
@@ -13068,6 +13081,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 7
   xRotation: 30
@@ -14870,6 +14884,7 @@ GameObject:
   - component: {fileID: 1143825449}
   - component: {fileID: 1143825448}
   - component: {fileID: 1143825447}
+  - component: {fileID: 1143825450}
   m_Layer: 5
   m_Name: MainButtons
   m_TagString: Untagged
@@ -14965,6 +14980,28 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1143825445}
   m_CullTransparentMesh: 1
+--- !u!95 &1143825450
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1143825445}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: de7f19d4d5056e54e9476b4474beeaf3, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1153086007
 GameObject:
   m_ObjectHideFlags: 0
@@ -15325,6 +15362,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 7
   xRotation: 30
@@ -15611,6 +15649,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 7
   xRotation: 30
@@ -17351,6 +17390,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activePanel: {fileID: 0}
+  mainBtnsPanel: {fileID: 1143825445}
   cashTxt: {fileID: 2017451718}
   daysTxt: {fileID: 1966105776}
   ratingTxt: {fileID: 649031165}
@@ -17554,6 +17594,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 7
   xRotation: 30
@@ -18657,6 +18698,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 24
   xRotation: 0
@@ -21397,6 +21439,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 7
   xRotation: 30
@@ -21710,6 +21753,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 0
   xRotation: 10.3
@@ -23016,6 +23060,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 24
   xRotation: 10.3
@@ -25287,6 +25332,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 7
   xRotation: 30
@@ -26700,6 +26746,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 7
   xRotation: 30
@@ -29536,6 +29583,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 7
   xRotation: 30
@@ -29584,6 +29632,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 7
   xRotation: 30
@@ -30263,6 +30312,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 7
   xRotation: 30
@@ -30855,6 +30905,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camera: {fileID: 519420028}
   movingManager: {fileID: 1346466771}
+  uiManager: {fileID: 1346466764}
   duration: 1
   backIndent: 24
   xRotation: 0

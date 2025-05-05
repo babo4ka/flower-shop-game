@@ -5,7 +5,7 @@ public class MoveScript : MonoBehaviour
     [SerializeField] GameObject camera;
 
     [SerializeField] MovingManager movingManager;
-
+    [SerializeField] UIManager uiManager;
 
     [SerializeField] float duration;
     private float elapsedTime = -1;
@@ -21,7 +21,7 @@ public class MoveScript : MonoBehaviour
     private void OnMouseDown()
     {
         movingManager.AddPosition(gameObject.name);
-        MoveToPos(1);
+        MoveToPos();
     }
 
     private void Awake()
@@ -34,12 +34,17 @@ public class MoveScript : MonoBehaviour
         if (pos == gameObject.name)
         {
             Debug.Log($"here! {gameObject.name}");
-            MoveToPos(-1);
+            MoveToPos();
         }
     }
 
-    private void MoveToPos(float side)
+    private void MoveToPos()
     {
+        if (gameObject.name == "CameraInitPos")
+            uiManager.ToggleMainButtons("show");
+        else
+            uiManager.ToggleMainButtons("hide");
+
         from = camera.transform.position;
         to = new Vector3(transform.position.x, camera.transform.position.y, transform.position.z - backIndent);
         fromRotation = camera.transform.rotation;

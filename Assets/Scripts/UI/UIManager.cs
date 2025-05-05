@@ -21,6 +21,9 @@ public class UIManager : MonoBehaviour
     //активная панель
     [SerializeField] GameObject activePanel;
 
+    //главные кнопки
+    [SerializeField] GameObject mainBtnsPanel;
+
     //панель с отображением денег
     [SerializeField] TMP_Text cashTxt;
     [SerializeField] TMP_Text daysTxt;
@@ -267,6 +270,17 @@ public class UIManager : MonoBehaviour
             maxShowCasesPanel.SetActive(true);
             shopPageNameTxt.text = "витрины";
         }
+    }
+
+
+    public void ToggleMainButtons(string action)
+    {
+        Debug.Log(action);
+        if (action == "show")
+            mainBtnsPanel.GetComponent<Animator>().SetBool("hide", false);
+        else
+            mainBtnsPanel.GetComponent<Animator>().SetBool("hide", true);
+
     }
     #endregion
 
