@@ -168,7 +168,7 @@ public class WorkDayManager : MonoBehaviour
             case "to":
                 if (workersOnShift != null)
                 {
-                    if (workersOnShift.Count >= 2) return (false, "количество работников на смене максимально");
+                    if (workersOnShift.Count >= shopManager.MaxWorkers()) return (false, "количество работников на смене максимально");
                 }
                 workersOnShift ??= new();
                 workersOnShift.Add(worker);
@@ -263,7 +263,6 @@ public class WorkDayManager : MonoBehaviour
             
             duration = baseServiceTime * ((100 - worker.motivation) / 10);
             countStats(satisfaction);
-            Debug.Log($"client satisfaction = {satisfaction}");
             return false;
         }
 
