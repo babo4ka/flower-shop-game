@@ -14,10 +14,11 @@ public class MovingManager : MonoBehaviour
 
     [SerializeField] ShopManager shopManager;
 
-    private void Start()
+    private void Awake()
     {
         currentPos = "CameraInitPos";
-        OpenShowCases();
+        //OpenShowCases();
+        ShopManager.sendUpdatedShopInfo += OpenShowCases;
     }
 
     public void AddPosition(string position)
@@ -34,16 +35,19 @@ public class MovingManager : MonoBehaviour
             move?.Invoke(positions.Pop());
     }
 
-    private void OpenShowCases()
+    private void OpenShowCases(Shop shop)
     {
-        var maxCases = shopManager.OpenedShowCases();
+        var maxCases = shop.maxShowCases;
         if (maxCases > 1)
         {
             var cases = GameObject.FindGameObjectsWithTag("boxDefault");
             cases = cases.OrderBy(c => int.Parse(c.name.Split(" ")[1])).ToArray();
             for (int i = 1; i < maxCases; i++)
             {
-                Destroy(cases[i].transform.Find("unavailable").gameObject);
+                cases[i].GetComponent<DropTarget>().Available = true;
+                Transform krest;
+                if((krest = cases[i].transform.Find("unavailable")) != null)
+                    Destroy(krest.gameObject);
             }
         }
         

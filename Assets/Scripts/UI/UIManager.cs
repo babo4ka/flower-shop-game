@@ -18,6 +18,8 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region переменные из редактора
+    //canvas
+    [SerializeField] GameObject canvas;
     //активная панель
     [SerializeField] GameObject activePanel;
 
@@ -707,10 +709,10 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    private void ShowMessage(string message, GameObject panel)
+    public void ShowMessage(string message, GameObject panel)
     {
         messageBanner.transform.Find("MessageTxt").GetComponent<TMP_Text>().text = message;
-        Instantiate(messageBanner, panel.transform);
+        Instantiate(messageBanner, panel==null?canvas.transform:panel.transform);
         Debug.Log(message);
     }
 
