@@ -8,7 +8,7 @@ public class ShopFlowers
     public int id { get; set;  }
 
     public int count_in_stock { get; set; }
-
+    [Ignore]
     public int count_on_sale { get; set; }
 
     //внешний ключ к таблице flowers

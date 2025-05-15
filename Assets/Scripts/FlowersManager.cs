@@ -70,19 +70,31 @@ public class FlowersManager : MonoBehaviour
     //выставление цветка на продажу
     public (bool, string) ToggleSaleFlowers(string flowerName, int count, DataBaseManager.ToggleSaleAction action)
     {
-
+        var flower = GetShopFlowerByName(flowerName);
         switch (action)
         {
             case DataBaseManager.ToggleSaleAction.PUT:
-                if (GetShopFlowerByName(flowerName).count_in_stock < count) return (false, "Недостаточно цветов на складе");
+                if (flower.count_in_stock < count) return (false, "Недостаточно цветов на складе");
+                else
+                {
+                    flower.count_on_sale += count;
+                    flower.count_in_stock -= count;
+                }
                 break;
 
             case DataBaseManager.ToggleSaleAction.REMOVE:
-                if (GetShopFlowerByName(flowerName).count_on_sale < count) return (false, "Недостаточно цветов на витрине");
+                if (flower.count_on_sale < count) return (false, "Недостаточно цветов на витрине");
+                else
+                {
+                    flower.count_on_sale -= count;
+                    flower.count_in_stock += count;
+                }
                 break;
         }
 
-        dataBaseManager.ToggleSaleFlowers(flowerName, count, action);
+        
+
+        //dataBaseManager.ToggleSaleFlowers(flowerName, count, action);
         return (true, "");
     }
 
@@ -98,6 +110,19 @@ public class FlowersManager : MonoBehaviour
         {
             return (false, "Недостаточно средств");
         }
+    }
+
+    public void ClearFlowers()
+    {
+        shopflowers.ForEach(f =>
+        {
+            var c = f.count_on_sale;
+            if (c > 0)
+            {
+                f.count_in_stock += c;
+                f.count_in_stock -= c;
+            }
+        });
     }
 
     public void SpendFlower(string flowerName)

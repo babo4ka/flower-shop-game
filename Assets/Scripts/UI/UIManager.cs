@@ -30,6 +30,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject flowersToChooseContent;
     List<GameObject> flowersToChooseCards;
     [SerializeField] GameObject flowerToChooseObject;
+    [SerializeField] GameObject flowerToChooseImage;
 
     //панель с отображением денег
     [SerializeField] TMP_Text cashTxt;
@@ -297,6 +298,7 @@ public class UIManager : MonoBehaviour
         {
             RemoveCards(flowersToChooseCards);
             flowersToChoosePanel.SetActive(false);
+            flowerToChooseImage.SetActive(false);
         }
         else
         {
@@ -308,6 +310,12 @@ public class UIManager : MonoBehaviour
                 GameObject card = Instantiate(flowerToChooseObject, flowersToChooseContent.transform);
                 card.transform.Find("FlowerNameTxt").GetComponent<TMP_Text>().text = sf.flower_name;
                 flowersToChooseCards.Add(card);
+                card.GetComponent<Button>().onClick.RemoveAllListeners();
+                card.GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    flowerToChooseImage.GetComponent<DragNDrop>().FlowerName = sf.flower_name;
+                });
+                flowerToChooseImage.SetActive(true);
             });
         }
     }

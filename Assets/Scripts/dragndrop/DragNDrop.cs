@@ -12,6 +12,13 @@ public class DragNDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     private CanvasGroup canvasGroup;
     private Vector2 startPosition;
     private GameObject spawnedWorldObject;
+    [SerializeField] string flowerName;
+
+    public string FlowerName
+    {
+        get => flowerName;
+        set => flowerName = value;
+    }
 
 
     private void Awake()
@@ -64,7 +71,7 @@ public class DragNDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
         if (Physics.Raycast(ray, out hit))
         {
-            hit.collider.gameObject.GetComponent<DropTarget>().OnDropObject(this.gameObject);
+            hit.collider.gameObject.GetComponent<DropTarget>().OnDropObject(this.gameObject, flowerName);
         }
         else if (returnToStartPosition)
         {

@@ -143,6 +143,7 @@ public class WorkDayManager : MonoBehaviour
         moneyEarned = 0f;
         shopManager.IncreaseDay();
         flowersManager.UpdateFlwoersPopularityStory();
+        flowersManager.ClearFlowers();
         Debug.Log("Day finished!");
     }
 
