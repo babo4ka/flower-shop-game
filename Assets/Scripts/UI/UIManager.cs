@@ -26,6 +26,10 @@ public class UIManager : MonoBehaviour
     //главные кнопки
     [SerializeField] GameObject mainBtnsPanel;
 
+    //панель для отображения имитации рабочего дня
+    [SerializeField] GameObject workImiatationPanel;
+
+    //выбор цветка чтобы выставить на продажу
     [SerializeField] GameObject flowersToChoosePanel;
     [SerializeField] GameObject flowersToChooseContent;
     List<GameObject> flowersToChooseCards;
@@ -646,6 +650,11 @@ public class UIManager : MonoBehaviour
             });
         });
     }
+
+    public void OpenWorkImitationPanel()
+    {
+        Instantiate(workImiatationPanel, canvas.transform);
+    }
     #endregion
 
     #region методы для отображения информации статистики
@@ -741,5 +750,6 @@ public class UIManager : MonoBehaviour
         ratingTxt.text = $"{shop.rating}";
     }
     #endregion
+
 
 }

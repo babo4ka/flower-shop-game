@@ -14,6 +14,8 @@ public class WorkDayManager : MonoBehaviour
     //менеджер для работы с базой данных
     [SerializeField] DataBaseManager dataBaseManager;
 
+    public static Action<float> startDay;
+
     public static Action startAnnotherDay;
 
     public static Action<StatisticsManager> statisticsShow;
@@ -118,6 +120,7 @@ public class WorkDayManager : MonoBehaviour
         InvokeRepeating(nameof(GetClients), 0, 5);
         dayStartTime = Time.time;
         dayStarted = true;
+        startDay?.Invoke(workDayTime);
     }
 
     private void FinishWorkDay()
