@@ -631,7 +631,7 @@ public class UIManager : MonoBehaviour
             {
                 if(float.Parse(input) >= worker.minimal_hour_salary)
                 {
-                    var (isShifted, status) = workersManager.SendWorkerToShift(worker);
+                    var (isShifted, status) = workersManager.SendWorkerToShift(worker, float.Parse(input));
                     salaryForWorkerSettingPanel.SetActive(false);
                     if (isShifted)
                     {

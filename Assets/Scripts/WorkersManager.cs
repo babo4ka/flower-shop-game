@@ -104,10 +104,11 @@ public class WorkersManager : MonoBehaviour
         return availableWorkers;
     }
 
-    public (bool, string) SendWorkerToShift(Workers worker)
+    public (bool, string) SendWorkerToShift(Workers worker, float hourSalary)
     {
         if (worker.motivation <= 20) return (false, "у работника не хватает мотивации!");
         worker.isOnShift = true;
+        worker.hour_salary = hourSalary;
         return ((bool, string))(replaceWorkerOnShift?.Invoke(worker, "to"));
     }
 

@@ -30,7 +30,7 @@ public class WorkDayManager : MonoBehaviour
     private float moneyEarned = 0f;
 
 
-    private const float workDayTime = 10f;
+    private const float workDayTime = 30f;
 
     private float dayStartTime = 0f;
 
@@ -140,6 +140,7 @@ public class WorkDayManager : MonoBehaviour
             w.isOnShift = false;
             workersManager.UpdateWorker(w);
         });
+        dataBaseManager.PaySalary(workersOnShift);
         workersOnShift.Clear();
         workersCoroutines.Clear();
         shopManager.AddCash(moneyEarned);
@@ -153,15 +154,15 @@ public class WorkDayManager : MonoBehaviour
 
     private void GetClients()
     {
-        //if (Time.time - dayStartTime <= workDayTime - 10)
-        //{
+        if (Time.time - dayStartTime <= 25)
+        {
             var clients = clientCreator.GetClients();
-            Debug.Log($"generated {clients.Count} clients");
+            Debug.Log($"generated {clients.Count}");
             clients.ForEach(c =>
             {
                 clientsQueue.Enqueue(c);
             });
-        //}
+        }
     }
 
 

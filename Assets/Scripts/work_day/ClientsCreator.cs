@@ -64,7 +64,7 @@ public class ClientsCreator
     public List<Client> GetClients()
     {
         var clients = new List<Client>();    
-        int clientsCount = Random.Range(1, 4);
+        int clientsCount = Random.Range(1, shopManager.OpenedShowCases());
 
         for (int i = 0; i < clientsCount; i++)
         {

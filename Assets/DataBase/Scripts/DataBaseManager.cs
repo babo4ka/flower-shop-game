@@ -365,6 +365,20 @@ public class DataBaseManager : MonoBehaviour
         updateWorkersData?.Invoke(_dbConnection.Query<Workers>("select * from workers"));
     }
 
+    public void PaySalary(List<Workers> workers)
+    {
+        var salarySum = workers.Sum(w=>w.hour_salary*8);
+        Debug.Log($"paid salary = {salarySum}");
+
+        var shop = _dbConnection.Query<Shop>("select * from shop").First();
+
+        shop.cash -= salarySum;
+
+        _dbConnection.Update(shop);
+
+        updateShopData?.Invoke(shop);
+    }
+
     //Ã¿√¿«»Õ
     public void AddCash(float amount)
     {
