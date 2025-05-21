@@ -78,12 +78,14 @@ public class WorkDayManager : MonoBehaviour
                     client.Satisfaction = 0;
                     if (freeWorker.motivation < 5) freeWorker.motivation = 0;
                     else freeWorker.motivation -= 5f;
+                    Debug.Log("depressed");
                 }
                 else
                 {
                     var wc = workersCoroutines[freeWorker];
                     wc.IsBuzy = true;
                     wc.Client = client;
+                    Debug.Log($"price of flower client wants {flowersManager.GetShopFlowerPriceByName(client.FlowerWants)}");
                     wc.FlowerPrice = flowersManager.GetShopFlowerPriceByName(client.FlowerWants);
                     StartCoroutine(wc);
                 }
@@ -120,6 +122,7 @@ public class WorkDayManager : MonoBehaviour
         InvokeRepeating(nameof(GetClients), 0, 5);
         dayStartTime = Time.time;
         dayStarted = true;
+        Debug.Log($"workers count {workersOnShift.Count}");
         startDay?.Invoke(workDayTime);
     }
 

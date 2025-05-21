@@ -17,18 +17,19 @@ public class DropTarget : MonoBehaviour
 
     public void OnDropObject(GameObject droppedObject, string flowerName)
     {
-        Debug.Log($"Object {droppedObject.name} dropped on {gameObject.name}");
+        //Debug.Log($"Object {droppedObject.name} dropped on {gameObject.name}");
         if(flowersCount < 5)
         {
             if (available)
             {
-                Debug.Log(GetComponentsInChildren<Transform>().First().gameObject.name);
+                //Debug.Log(GetComponentsInChildren<Transform>().First().gameObject.name);
                 var place = GetComponentsInChildren<Transform>().First().Find($"FlowerPlace {flowersCount+1}");
                 var obj = Instantiate(flower, place);
                 var pos = obj.transform.position;
                 pos.y += 5;
                 obj.transform.position = pos;
                 flowersCount++;
+                Debug.Log($"toggle flower {flowerName}");
                 flowersManager.ToggleSaleFlowers(flowerName, 1, DataBaseManager.ToggleSaleAction.PUT);
             }
             else uiManager.ShowMessage("Витрина недоступна", null);

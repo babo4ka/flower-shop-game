@@ -69,6 +69,7 @@ public class ClientsCreator
         for (int i = 0; i < clientsCount; i++)
         {
             var (flowerWants, flowerPrice) = GetFlower();
+            Debug.Log($"client wants {flowerWants}");
             clients.Add(new Client(flowerWants, flowerPrice + (flowerPrice * (up * shopManager.CurrentRating()/ 100)), flowerPrice));
         }
 

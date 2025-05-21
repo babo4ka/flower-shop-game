@@ -144,7 +144,8 @@ public class FlowersManager : MonoBehaviour
 
     public bool HasFlower(string flowerName)
     {
-        return dataBaseManager.HasFlower(flowerName);
+        return GetShopFlowerByName(flowerName).count_on_sale > 0;
+        //return dataBaseManager.HasFlower(flowerName);
     }
 
     public float GetFlowerPriceByName(string flowerName)
