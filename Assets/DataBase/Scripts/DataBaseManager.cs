@@ -179,8 +179,8 @@ public class DataBaseManager : MonoBehaviour
 
         names.ForEach(name =>
         {
-            string query = $@"select flowers.name as flower_name, popularity_story.popularity_level, flowers.popularity_coefficient, flowers.market_price 
-                            from flowers
+            string query = $@"select flowers.name as flower_name, popularity_story.popularity_level, 
+                            flowers.popularity_coefficient, flowers.market_price from flowers
                             join popularity_story on popularity_story.flower_name = ""{name.flower_name}"" and 
                             flowers.name = ""{name.flower_name}"" order by popularity_story.id desc limit 1;";
 

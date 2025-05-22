@@ -6,6 +6,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using TMPro;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -15,6 +16,7 @@ public class UIManager : MonoBehaviour
     #region внутренние переменные
     //список точек популярности
     private List<GameObject> chartDots;
+    private List<GameObject> chartLines;
     #endregion
 
     #region переменные из редактора
@@ -421,6 +423,7 @@ public class UIManager : MonoBehaviour
 
         ClearDots();
         chartDots = new();
+        chartLines = new();
 
 
         RectTransform chartRectTransform = popularityChart.GetComponent<RectTransform>();
@@ -430,14 +433,37 @@ public class UIManager : MonoBehaviour
         float startY = chartRectTransform.rect.yMin;
         float height = chartRectTransform.rect.height;
 
+        Vector2 lastDotPos = Vector2.zero;
         popularityStory.ForEach(story =>
         {
-            GameObject dot = Instantiate(chartDot, popularityChart.transform);
+            GameObject dot = Instantiate(chartDot, chartRectTransform);
             float yPos = startY + (story.popularity_level / 100 * height);
             dot.GetComponent<RectTransform>().anchoredPosition = new Vector2(xPos, yPos);
             xPos += step;
 
             chartDots.Add(dot);
+
+            if(lastDotPos != Vector2.zero)
+            {
+                GameObject conn = new("dotConn", typeof(Image));
+                conn.layer = 5;
+                conn.GetComponent<Image>().color = Color.black;
+                conn.transform.SetParent(chartRectTransform, false);
+                RectTransform rt = conn.GetComponent<RectTransform>();
+                Vector2 dir = (dot.GetComponent<RectTransform>().anchoredPosition - lastDotPos).normalized;
+                float distance = Vector2.Distance(lastDotPos, dot.GetComponent<RectTransform>().anchoredPosition);
+                rt.anchorMin = new Vector2(.5f, .5f);
+                rt.anchorMax = new Vector2(.5f, .5f);
+                rt.sizeDelta = new Vector2(distance, 3f);
+                rt.anchoredPosition = lastDotPos + dir * distance * .5f;
+
+                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                rt.localEulerAngles = new Vector3(0, 0, angle);
+
+                chartLines.Add(conn);
+
+            }
+            lastDotPos = dot.GetComponent<RectTransform>().anchoredPosition;
         });
 
 
@@ -454,6 +480,15 @@ public class UIManager : MonoBehaviour
                 });
                 chartDots.Clear();
             }  
+
+            if(chartLines is not null)
+            {
+                chartLines.ForEach(line =>
+                {
+                    Destroy(line);
+                });
+                chartLines.Clear();
+            }
         }
     }
 
