@@ -1,3 +1,5 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -8,6 +10,13 @@ public class DropTarget : MonoBehaviour
     [SerializeField] private bool available;
     [SerializeField] UIManager uiManager;
     [SerializeField] FlowersManager flowersManager;
+
+    private List<GameObject> flowers;
+
+    private void Awake()
+    {
+        flowers = new();
+    }
 
     public bool Available
     {
@@ -31,6 +40,7 @@ public class DropTarget : MonoBehaviour
                 flowersCount++;
                 Debug.Log($"toggle flower {flowerName}");
                 flowersManager.ToggleSaleFlowers(flowerName, 1, DataBaseManager.ToggleSaleAction.PUT);
+                flowers.Add(obj);
             }
             else uiManager.ShowMessage("Витрина недоступна", null);
         }

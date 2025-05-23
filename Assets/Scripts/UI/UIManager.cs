@@ -454,7 +454,7 @@ public class UIManager : MonoBehaviour
                 float distance = Vector2.Distance(lastDotPos, dot.GetComponent<RectTransform>().anchoredPosition);
                 rt.anchorMin = new Vector2(.5f, .5f);
                 rt.anchorMax = new Vector2(.5f, .5f);
-                rt.sizeDelta = new Vector2(distance, 3f);
+                rt.sizeDelta = new Vector2(distance, 2f);
                 rt.anchoredPosition = lastDotPos + dir * distance * .5f;
 
                 float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
