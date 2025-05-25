@@ -17,7 +17,6 @@ public class MovingManager : MonoBehaviour
     private void Awake()
     {
         currentPos = "CameraInitPos";
-        //OpenShowCases();
         ShopManager.sendUpdatedShopInfo += OpenShowCases;
     }
 
@@ -32,7 +31,12 @@ public class MovingManager : MonoBehaviour
         Debug.Log(positions.Count);
         Debug.Log(currentPos);
         if(positions.Count != 0)
-            move?.Invoke(positions.Pop());
+        {
+            var pos = positions.Pop();
+            move?.Invoke(pos);
+            currentPos = pos;
+        }
+            
     }
 
     private void OpenShowCases(Shop shop)

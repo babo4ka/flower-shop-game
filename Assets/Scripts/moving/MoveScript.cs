@@ -45,7 +45,7 @@ public class MoveScript : MonoBehaviour
 
     private void MoveToPos()
     {
-        if (gameObject.name == "CameraInitPos")
+        if (gameObject.name == "CameraInitPos" || gameObject.name.Contains("mark"))
             uiManager.ToggleMainButtons("show");
         else
             uiManager.ToggleMainButtons("hide");

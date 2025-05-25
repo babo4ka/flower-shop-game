@@ -295,12 +295,12 @@ public class UIManager : MonoBehaviour
         else
             mainBtnsPanel.GetComponent<Animator>().SetBool("hide", true);
 
-        ToggleFlowersToChoosePanel();
+        ToggleFlowersToChoosePanel(action);
     }
 
-    private void ToggleFlowersToChoosePanel()
+    private void ToggleFlowersToChoosePanel(string action)
     {
-        if (flowersToChoosePanel.activeInHierarchy)
+        if (action == "show")
         {
             RemoveCards(flowersToChooseCards);
             flowersToChoosePanel.SetActive(false);
