@@ -20,6 +20,7 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region переменные из редактора
+    [Header("основное")]
     //canvas
     [SerializeField] GameObject canvas;
     //активна€ панель
@@ -29,9 +30,17 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject mainBtnsPanel;
 
     //панель дл€ отображени€ имитации рабочего дн€
+    [Header("панель дл€ отображени€ имитации рабочего дн€")]
     [SerializeField] GameObject workImiatationPanel;
 
+    [Header("панель событи€")]
+    [SerializeField] GameObject eventPanel;
+    [SerializeField] TMP_Text eventName;
+    [SerializeField] TMP_Text eventPrice;
+    [SerializeField] Button solveEventBtn;
+
     //выбор цветка чтобы выставить на продажу
+    [Header("выбор цветка чтобы выставить на продажу")]
     [SerializeField] GameObject flowersToChoosePanel;
     [SerializeField] GameObject flowersToChooseContent;
     List<GameObject> flowersToChooseCards;
@@ -39,6 +48,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject flowerToChooseImage;
 
     //панель с отображением денег
+    [Header("панель с отображением денег")]
     [SerializeField] TMP_Text cashTxt;
     [SerializeField] TMP_Text daysTxt;
     [SerializeField] TMP_Text ratingTxt;
@@ -62,6 +72,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject shiftWorkersListPanel;
 
 
+    [Header("менеджеры")]
     //менеджер базы данных
     [SerializeField] DataBaseManager dataBaseManager;
     //менеджер дл€ работы с цветами
@@ -72,26 +83,31 @@ public class UIManager : MonoBehaviour
     [SerializeField] ShopManager shopManager;
 
     //панели дл€ рынка с цветами
+    [Header("панели дл€ рынка с цветами")]
     [SerializeField] GameObject flowersListOnMarketContent;
     [SerializeField] GameObject flowersListOnMarketObject;
     List<GameObject> flowersOnMarketCards;
 
     //панели дл€ рынка с работниками
+    [Header("панели дл€ рынка с работниками")]
     [SerializeField] GameObject workersListOnMarketContent;
     [SerializeField] GameObject workersListOnMarketObject;
     List<GameObject> workersOnMarketCards;
 
     //панели дл€ цветов в магазине
+    [Header("панели дл€ цветов в магазине")]
     [SerializeField] GameObject flowersListOnShopContent;
     [SerializeField] GameObject flowersListOnShopObject;
     List<GameObject> flowersOnShopCards;
 
     //панели дл€ нан€тых работников
+    [Header("панели дл€ нан€тых работников")]
     [SerializeField] GameObject hiredWorkersListContent;
     [SerializeField] GameObject hiredWorkersListObject;
     List<GameObject> hiredWorkersCards;
 
     //панели дл€ настроек магазина
+    [Header("панели дл€ настроек магазина")]
     [SerializeField] GameObject shopSettingsPanel;
     [SerializeField] GameObject maxShowCasesPanel;
     [SerializeField] GameObject maxWorkersPanel;
@@ -108,6 +124,7 @@ public class UIManager : MonoBehaviour
 
 
     //панели дл€ работников на смену
+    [Header("панели дл€ работников на смену")]
     [SerializeField] TMP_Text shiftWorkersCountTxt;
     [SerializeField] GameObject shiftWorkersListContent;
     [SerializeField] GameObject shiftWorkersListObject;
@@ -116,6 +133,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject salaryForWorkerSettingPanel;
 
     //график попул€рности
+    [Header("график попул€рности")]
     //панель дл€ графика
     [SerializeField] GameObject popularityChartPanel;
     //график попул€рности
@@ -124,9 +142,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] TMP_Text flowerNameOnChart;
     //префаб точки дл€ графика
     [SerializeField] GameObject chartDot;
-    
+
 
     //панель покупки цветов
+    [Header("панель покупки цветов")]
     //цена цветка
     [SerializeField] GameObject flowerPriceText;
     //кнопка дл€ открыти€ панели дл€ покупки цветов
@@ -135,12 +154,14 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject buyFlowerPanel;
 
     //панель цветка в магазине
+    [Header("панель цветка в магазине")]
     //кнопки дл€ изменени€ данных цветка
     [SerializeField] Button changeFlowerPriceBtn;
     [SerializeField] Button deleteFlowerFromSaleBtn;
     [SerializeField] Button putFlowerOnSaleBtn;
 
     //отображение информации о цветках
+    [Header("отображение информации о цветах")]
     [SerializeField] TMP_Text flowerNameOnShopTxt;
     [SerializeField] TMP_Text flowerOnShopPriceTxt;
     [SerializeField] TMP_Text countFlowersOnSaleTxt;
@@ -150,6 +171,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] TMP_InputField toggleFlowersOnSaleInput;
 
     //статистика
+    [Header("статистика")]
     [SerializeField] GameObject statsAfterShiftPanel;
     [SerializeField] TMP_Text[] textForStats;
 
@@ -159,6 +181,8 @@ public class UIManager : MonoBehaviour
 
     //баннер дл€ отображени€ информации
     [SerializeField] GameObject messageBanner;
+
+    public static Action dayContinue;
     #endregion
 
     #region включение отключение элементов интерфейса
@@ -750,6 +774,26 @@ public class UIManager : MonoBehaviour
                 ReloadPanel(maxWorkersPanel);
         });
     }
+    #endregion
+
+    #region методы дл€ работы с событи€ми
+    public void ToggleEventPanel(string name, float price)
+    {
+        eventPanel.SetActive(true);
+
+        eventName.text = name;
+        eventPrice.text = price.ToString();
+
+        solveEventBtn.onClick.RemoveAllListeners();
+        solveEventBtn.onClick.AddListener(() =>
+        {
+            Debug.Log("dasds");
+            shopManager.SpendCash(price);
+            eventPanel.SetActive(false);
+            dayContinue?.Invoke();
+        });
+    }
+
     #endregion
 
     private void RemoveCards(List<GameObject> cards)

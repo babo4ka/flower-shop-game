@@ -40,19 +40,28 @@ public class ShopManager : MonoBehaviour
     #region методы обновления информации в базе данных
     public void AddCash(float amount)
     {
-        dataBaseManager.AddCash(amount);
+        shop.cash += amount;
+        dataBaseManager.UpdateShop(shop);
     }
 
+    public void SpendCash(float amount)
+    {
+        shop.cash -= amount;
+        dataBaseManager.UpdateShop(shop);
+    }
     public void IncreaseDay()
     {
-        dataBaseManager.IncreaseDay();
+        shop.daysGone += 1;
+        dataBaseManager.UpdateShop(shop);
     }
 
     public bool IncreaseMaxWorkers()
     {
         if(shop.cash >= workPlacePrice)
         {
-            dataBaseManager.IncreaseMaxWorkers(workPlacePrice);
+            shop.maxWorkers++;
+            shop.cash -= workPlacePrice;
+            dataBaseManager.UpdateShop(shop);
             return true;
         }
 
@@ -63,7 +72,9 @@ public class ShopManager : MonoBehaviour
     {
         if(shop.cash >= showCasePrice)
         {
-            dataBaseManager.IncreaseMaxShowCases(showCasePrice);
+            shop.maxShowCases++;
+            shop.cash -= showCasePrice;
+            dataBaseManager.UpdateShop(shop);
             return true;
         }
 

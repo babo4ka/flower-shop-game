@@ -13,6 +13,8 @@ public class WorkDayManager : MonoBehaviour
     [SerializeField] WorkersManager workersManager;
     //менеджер для работы с базой данных
     [SerializeField] DataBaseManager dataBaseManager;
+    //менеджер UI
+    [SerializeField] UIManager uiManager;
 
     public static Action<float> startDay;
 
@@ -22,6 +24,8 @@ public class WorkDayManager : MonoBehaviour
 
     private ClientsCreator clientCreator;
     private Queue<Client> clientsQueue;
+
+    private List<EventTypes> eventTypes;
 
     //работники на смене
     private List<Workers> workersOnShift;
@@ -34,7 +38,10 @@ public class WorkDayManager : MonoBehaviour
 
     private float dayStartTime = 0f;
 
+    private float dayPausedTime = 0f;
+
     private bool dayStarted = false;
+    private bool dayPaused = false;
 
     private readonly Dictionary<Workers, ServeClient> workersCoroutines = new();
 
@@ -58,11 +65,13 @@ public class WorkDayManager : MonoBehaviour
         clientCreator = new ClientsCreator(shopManager, flowersManager);
         GameManager.startAnotherDay += StartAnotherDay;
         WorkersManager.replaceWorkerOnShift += ReplaceWorkerOnShift;
+        DataBaseManager.updateEventTypesData += GetEventTypes;
+        UIManager.dayContinue += ContinueDay;
     }
 
     private void Update()
     {
-        if(dayStarted)
+        if(dayStarted && !dayPaused)
         {
             if(Time.time - dayStartTime >= workDayTime) {
                 FinishWorkDay();
@@ -120,6 +129,7 @@ public class WorkDayManager : MonoBehaviour
         Debug.Log("Day started!");
         clientsQueue = new Queue<Client>();
         InvokeRepeating(nameof(GetClients), 0, 5);
+        InvokeRepeating(nameof(GenerateEvent), 5, 3);
         dayStartTime = Time.time;
         dayStarted = true;
         Debug.Log($"workers count {workersOnShift.Count}");
@@ -168,6 +178,39 @@ public class WorkDayManager : MonoBehaviour
         }
     }
 
+    private void GetEventTypes(List<EventTypes> types)
+    {
+        eventTypes?.Clear();
+        eventTypes = types;
+    }
+
+    private void GenerateEvent()
+    {
+        if (UnityEngine.Random.RandomRange(0f, 1f) < .8f)
+        {
+            var num = UnityEngine.Random.RandomRange(0, eventTypes.Count-1);
+            uiManager.ToggleEventPanel(eventTypes[num].name, eventTypes[num].cost);
+            PauseDay();
+            Debug.Log($"event generated {eventTypes[num].name} {eventTypes[num].cost}");
+        }
+        
+    }
+
+    private void PauseDay()
+    {
+        CancelInvoke();
+        dayPausedTime = Time.time - dayStartTime;
+        dayPaused = true;
+    }
+
+    private void ContinueDay()
+    {
+        InvokeRepeating(nameof(GetClients), 0, 5);
+        InvokeRepeating(nameof(GenerateEvent), 5, 3);
+
+        dayStartTime = Time.time - dayPausedTime;
+        dayPaused = false;
+    }
 
     private (bool, string) ReplaceWorkerOnShift(Workers worker, string action)
     {

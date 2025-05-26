@@ -13,6 +13,7 @@ public class DataBaseManager : MonoBehaviour
     public static Action<List<FlowersPrice>> updateFlowersPricesData;
     public static Action<List<ShopFlowers>> updateShopFlowersData;
     public static Action<List<Workers>> updateWorkersData;
+    public static Action<List<EventTypes>> updateEventTypesData;
     #endregion
 
     private SQLiteConnection _dbConnection;
@@ -34,6 +35,7 @@ public class DataBaseManager : MonoBehaviour
         GetShopFlowersData();
         GetFlowersPrice();
         GetWorkersData();
+        GetEventTypes();
         //UpdateFlowers();
         //GetFlowersDataToCheck();
         //CreateInitialPopularityPatterns();
@@ -380,6 +382,14 @@ public class DataBaseManager : MonoBehaviour
     }
 
     //Ã¿√¿«»Õ
+    public void UpdateShop(Shop shop)
+    {
+        _dbConnection.Update(shop);
+        var shop1 = _dbConnection.Query<Shop>("select * from shop").First();
+
+        updateShopData?.Invoke(shop1);
+    }
+
     public void AddCash(float amount)
     {
         var shop = _dbConnection.Query<Shop>("select * from shop").First();
@@ -414,6 +424,14 @@ public class DataBaseManager : MonoBehaviour
         _dbConnection.Update(shop);
         updateShopData?.Invoke(shop);
     }
+
+    //—Œ¡€“»ﬂ
+    private void GetEventTypes()
+    {
+        var types = _dbConnection.Query<EventTypes>("select * from event_types");
+        updateEventTypesData?.Invoke(types);
+    }
+
 
     //—“¿“»—“» ¿
     public void CountStats(int flowersSold, float money_earned, int clientsCount, float averageClientsSatisfaction)
