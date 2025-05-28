@@ -19,6 +19,7 @@ public class WorkDayManager : MonoBehaviour
     public static Action<float> startDay;
 
     public static Action startAnnotherDay;
+    public static Action dayFinish;
 
     public static Action<StatisticsManager> statisticsShow;
 
@@ -46,6 +47,8 @@ public class WorkDayManager : MonoBehaviour
     private readonly Dictionary<Workers, ServeClient> workersCoroutines = new();
 
     private StatisticsManager statsManager;
+
+    private List<EventsHappen> eventsHappen;
     
     private Workers GetFreeWorker()
     {
@@ -132,6 +135,8 @@ public class WorkDayManager : MonoBehaviour
         InvokeRepeating(nameof(GenerateEvent), 5, 3);
         dayStartTime = Time.time;
         dayStarted = true;
+        eventsHappen ??= new();
+        eventsHappen.Clear();
         Debug.Log($"workers count {workersOnShift.Count}");
         startDay?.Invoke(workDayTime);
     }
@@ -160,7 +165,7 @@ public class WorkDayManager : MonoBehaviour
         moneyEarned = 0f;
         shopManager.IncreaseDay();
         flowersManager.UpdateFlwoersPopularityStory();
-        flowersManager.ClearFlowers();
+        dayFinish?.Invoke();
         Debug.Log("Day finished!");
     }
 
@@ -190,6 +195,7 @@ public class WorkDayManager : MonoBehaviour
         {
             var num = UnityEngine.Random.RandomRange(0, eventTypes.Count-1);
             uiManager.ToggleEventPanel(eventTypes[num].name, eventTypes[num].cost);
+            //eventsHappen.Add(new EventsHappen() { _event = eventTypes[num].name });
             PauseDay();
             Debug.Log($"event generated {eventTypes[num].name} {eventTypes[num].cost}");
         }

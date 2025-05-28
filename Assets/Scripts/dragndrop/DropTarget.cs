@@ -15,6 +15,7 @@ public class DropTarget : MonoBehaviour
 
     private void Awake()
     {
+        WorkDayManager.dayFinish += ClearFlowers;
         flowers = new();
     }
 
@@ -22,6 +23,15 @@ public class DropTarget : MonoBehaviour
     {
         get => available; 
         set => available = value;
+    }
+
+    private void ClearFlowers()
+    {
+        flowers.ForEach(f =>
+        {
+            Destroy(f);
+        });
+        flowers.Clear();
     }
 
     public void OnDropObject(GameObject droppedObject, string flowerName)

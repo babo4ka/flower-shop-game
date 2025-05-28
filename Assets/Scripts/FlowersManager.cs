@@ -35,6 +35,7 @@ public class FlowersManager : MonoBehaviour
     {
         DataBaseManager.updateFlowersPricesData += UpdateFlowerPricesData;
         DataBaseManager.updateShopFlowersData += UpdateShopFlowersData;
+        WorkDayManager.dayFinish += ClearFlowers;
     }
 
 
@@ -112,7 +113,7 @@ public class FlowersManager : MonoBehaviour
         }
     }
 
-    public void ClearFlowers()
+    private void ClearFlowers()
     {
         shopflowers.ForEach(f =>
         {

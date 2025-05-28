@@ -787,7 +787,7 @@ public class UIManager : MonoBehaviour
         solveEventBtn.onClick.RemoveAllListeners();
         solveEventBtn.onClick.AddListener(() =>
         {
-            Debug.Log("dasds");
+            Debug.Log($"solve {name} for {price}");
             shopManager.SpendCash(price);
             eventPanel.SetActive(false);
             dayContinue?.Invoke();
