@@ -724,6 +724,7 @@ public class UIManager : MonoBehaviour
         textForStats[1].text = stats.ClientsCount.ToString();
         textForStats[2].text = stats.AverageSatisfaction.ToString();
         textForStats[3].text = stats.MoneyEarned.ToString();
+        textForStats[4].text = stats.eventsHappen.Sum(eh => Events.events[eh._event]).ToString();
 
         statsAfterShiftPanel.SetActive(true);
     }
@@ -738,6 +739,10 @@ public class UIManager : MonoBehaviour
         textForFullStats[1].text = stats.Sum(s => s.clients_count).ToString();
         textForFullStats[2].text = avgSatiscation.ToString();
         textForFullStats[3].text = stats.Sum(s=>s.money_earned).ToString();
+
+        var events = dataBaseManager.GetEventsHappen();
+
+        textForFullStats[4].text = events.Sum(e => Events.events[e]).ToString();
     }
 
     #endregion

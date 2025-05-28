@@ -35,7 +35,6 @@ public class DataBaseManager : MonoBehaviour
         GetShopFlowersData();
         GetFlowersPrice();
         GetWorkersData();
-        GetEventTypes();
         //UpdateFlowers();
         //GetFlowersDataToCheck();
         //CreateInitialPopularityPatterns();
@@ -425,16 +424,9 @@ public class DataBaseManager : MonoBehaviour
         updateShopData?.Invoke(shop);
     }
 
-    //—Œ¡€“»ﬂ
-    private void GetEventTypes()
-    {
-        var types = _dbConnection.Query<EventTypes>("select * from event_types");
-        updateEventTypesData?.Invoke(types);
-    }
-
 
     //—“¿“»—“» ¿
-    public void CountStats(int flowersSold, float money_earned, int clientsCount, float averageClientsSatisfaction)
+    public void CountStats(int flowersSold, float money_earned, int clientsCount, float averageClientsSatisfaction, List<EventsHappen> eventsHappen)
     {
         var wd = new WorkDays()
         {
@@ -478,6 +470,29 @@ public class DataBaseManager : MonoBehaviour
         updateShopData?.Invoke(shop);
 
         _dbConnection.Insert(wd);
+
+        wd = _dbConnection.Query<WorkDays>("select * from work_days order by id desc limit 1").First();
+
+        eventsHappen.ForEach(eh => {
+            eh.work_day = wd.id;
+            _dbConnection.Insert(eh);
+        });
+
+    }
+
+    public List<string> GetEventsHappen()
+    {
+        var workDays = _dbConnection.Query<WorkDays>("select * from work_days");
+
+        var events = new List<string>();
+
+        workDays.ForEach(wd =>
+        {
+            var eventsForDay = _dbConnection.Query<EventsHappen>($"select * from events_happen where work_day = {wd.id}");
+            events.AddRange(eventsForDay.Select(ed => ed._event));
+        });
+
+        return events;
     }
 
     public enum ToggleSaleAction{

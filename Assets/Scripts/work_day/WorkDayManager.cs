@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class WorkDayManager : MonoBehaviour
@@ -20,13 +21,13 @@ public class WorkDayManager : MonoBehaviour
 
     public static Action startAnnotherDay;
     public static Action dayFinish;
+    public static Action<bool> dayPause;
 
     public static Action<StatisticsManager> statisticsShow;
 
     private ClientsCreator clientCreator;
     private Queue<Client> clientsQueue;
 
-    private List<EventTypes> eventTypes;
 
     //работники на смене
     private List<Workers> workersOnShift;
@@ -68,7 +69,6 @@ public class WorkDayManager : MonoBehaviour
         clientCreator = new ClientsCreator(shopManager, flowersManager);
         GameManager.startAnotherDay += StartAnotherDay;
         WorkersManager.replaceWorkerOnShift += ReplaceWorkerOnShift;
-        DataBaseManager.updateEventTypesData += GetEventTypes;
         UIManager.dayContinue += ContinueDay;
     }
 
@@ -145,7 +145,7 @@ public class WorkDayManager : MonoBehaviour
     {
         CancelInvoke();
         statsManager.MoneyEarned = moneyEarned;
-        
+        statsManager.EventsHappen = eventsHappen;
         statisticsShow?.Invoke(statsManager);
         statsManager.CountInfo();
 
@@ -183,21 +183,17 @@ public class WorkDayManager : MonoBehaviour
         }
     }
 
-    private void GetEventTypes(List<EventTypes> types)
-    {
-        eventTypes?.Clear();
-        eventTypes = types;
-    }
 
     private void GenerateEvent()
     {
         if (UnityEngine.Random.RandomRange(0f, 1f) < .8f)
         {
-            var num = UnityEngine.Random.RandomRange(0, eventTypes.Count-1);
-            uiManager.ToggleEventPanel(eventTypes[num].name, eventTypes[num].cost);
-            //eventsHappen.Add(new EventsHappen() { _event = eventTypes[num].name });
+            var num = UnityEngine.Random.Range(0, Events.events.Count);
+            var names = Events.events.Keys.ToList();
+            uiManager.ToggleEventPanel(names[num], Events.events[names[num]]);
+            eventsHappen.Add(new EventsHappen() { _event = names[num] });
             PauseDay();
-            Debug.Log($"event generated {eventTypes[num].name} {eventTypes[num].cost}");
+            Debug.Log($"event generated {names[num]} {Events.events[names[num]]}");
         }
         
     }
@@ -207,6 +203,7 @@ public class WorkDayManager : MonoBehaviour
         CancelInvoke();
         dayPausedTime = Time.time - dayStartTime;
         dayPaused = true;
+        dayPause?.Invoke(true);
     }
 
     private void ContinueDay()
@@ -216,6 +213,7 @@ public class WorkDayManager : MonoBehaviour
 
         dayStartTime = Time.time - dayPausedTime;
         dayPaused = false;
+        dayPause?.Invoke(false);
     }
 
     private (bool, string) ReplaceWorkerOnShift(Workers worker, string action)

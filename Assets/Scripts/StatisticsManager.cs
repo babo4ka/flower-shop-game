@@ -1,3 +1,5 @@
+using NUnit.Framework;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class StatisticsManager
@@ -38,6 +40,14 @@ public class StatisticsManager
         get => allClientsSatisfaction / clientsCount;
     }
 
+    public List<EventsHappen> eventsHappen;
+
+    public List<EventsHappen> EventsHappen
+    {
+        get => eventsHappen;
+        set => eventsHappen = value;
+    }
+
     public void AddClient(float satisfaction)
     {
         clientsCount++;
@@ -52,7 +62,7 @@ public class StatisticsManager
 
     public void CountInfo()
     {
-        databaseManager.CountStats(flowersSold, moneyEarned, clientsCount, allClientsSatisfaction/clientsCount);
+        databaseManager.CountStats(flowersSold, moneyEarned, clientsCount, allClientsSatisfaction/clientsCount, eventsHappen);
     }
 
 }

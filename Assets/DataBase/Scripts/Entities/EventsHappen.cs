@@ -12,5 +12,5 @@ public class EventsHappen
     
     //внешний ключ к таблице event_types
     [Column("event")]
-    public int _event { get; set; }
+    public string _event { get; set; }
 }

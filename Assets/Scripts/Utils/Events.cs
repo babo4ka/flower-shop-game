@@ -2,10 +2,9 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Events", menuName = "My Objects/EventTypes")]
-public class Events : ScriptableObject
+public class Events
 {
-    public Dictionary<string, float> types;
-    public string a;
-    public List<string> dsa;
+    public static readonly Dictionary<string, float> events = new() {
+        { "поломка кассы", 200f }, { "поломка стола", 250 }
+    };
 }
