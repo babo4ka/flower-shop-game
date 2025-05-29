@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      bathroom_carpet_0: -20693956643689680
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

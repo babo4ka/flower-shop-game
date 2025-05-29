@@ -260,7 +260,12 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      woodenui_additional_0: 1197783794487653299
+      woodenui_additional_1: -5666715502827833171
+      woodenui_additional_2: -3641033051233624291
+      woodenui_additional_3: -6621397835397287457
+      woodenui_additional_4: -9119977714103964231
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
