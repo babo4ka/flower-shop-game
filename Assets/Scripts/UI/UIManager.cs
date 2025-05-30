@@ -430,6 +430,7 @@ public class UIManager : MonoBehaviour
                 var (bought, status) = flowersManager.BuyFlower(flowerName, count, price);
                 if (bought)
                 {
+                    buyFlowerPanel.SetActive(false);
                 }
                 else
                 {
