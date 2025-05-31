@@ -73,9 +73,7 @@ public class DragNDrop : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         {
             hit.collider.gameObject.GetComponent<DropTarget>().OnDropObject(this.gameObject, flowerName);
         }
-        else if (returnToStartPosition)
-        {
-            rectTransform.anchoredPosition = startPosition;
-        }
+
+        rectTransform.anchoredPosition = startPosition;
     }
 }
