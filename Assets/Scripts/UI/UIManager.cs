@@ -6,7 +6,6 @@ using System.Linq;
 using System.Xml.Serialization;
 using TMPro;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
-using UnityEditor.U2D.Aseprite;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;

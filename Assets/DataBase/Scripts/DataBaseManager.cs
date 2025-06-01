@@ -265,6 +265,7 @@ public class DataBaseManager : MonoBehaviour
         _dbConnection.Update(shop);
 
         updateShopData?.Invoke(shop);
+        updateShopFlowersData?.Invoke(shopFlowers);
     }
 
     //изменение цены цветка
