@@ -7,17 +7,25 @@ using UnityEngine.TestTools;
 
 public class MovnigTest
 {
+
+    AsyncOperation load;
+
+    [OneTimeSetUp]
+    public void SetUp()
+    {
+        load = SceneManager.LoadSceneAsync("Scenes/New Scene");
+    }
+
     [UnityTest]
     public IEnumerator MoveToShowcaseTest()
     {
-        var load = SceneManager.LoadSceneAsync("Scenes/New Scene");
-
         while (!load.isDone)
         {
             yield return null;
         }
 
-        var showCase = GameObject.FindGameObjectsWithTag("boxDefault").Where(box => box.name == "default 1").First();
+        var showCase = GameObject.FindGameObjectsWithTag("boxDefault")
+            .Where(box => box.name == "default 1").First();
 
         var camera = Camera.main;
         var initialCamearPos = camera.transform.position;

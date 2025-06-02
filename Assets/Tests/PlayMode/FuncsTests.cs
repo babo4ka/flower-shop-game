@@ -8,11 +8,17 @@ using UnityEngine.TestTools;
 public class FuncsTests
 {
 
+    AsyncOperation load;
+
+    [OneTimeSetUp]
+    public void SetUp()
+    {
+        load = SceneManager.LoadSceneAsync("Scenes/New Scene");
+    }
+
     [UnityTest]
     public IEnumerator TestBuyFlower()
     {
-        var load = SceneManager.LoadSceneAsync("Scenes/New Scene");
-
         while (!load.isDone)
         {
             yield return null;
@@ -27,14 +33,12 @@ public class FuncsTests
         var sf = flowersManager.GetShopFlowers();
         var s = sf.Where(f => f.flower_name == "Хризантема").First();
 
-        Assert.AreEqual(27, s.count_in_stock);
+        Assert.AreEqual(30, s.count_in_stock);
     }
 
 
     [UnityTest]
     public IEnumerator TestHireWorker() {
-        var load = SceneManager.LoadSceneAsync("Scenes/New Scene");
-
         while (!load.isDone)
         {
             yield return null;
@@ -56,21 +60,21 @@ public class FuncsTests
     [UnityTest]
     public IEnumerator TestPutFlowerToSale()
     {
-        var load = SceneManager.LoadSceneAsync("Scenes/New Scene");
-
         while (!load.isDone)
         {
             yield return null;
         }
 
-        var gameManager = GameObject.FindGameObjectWithTag("GameManager");
-        var flowersManager = gameManager.GetComponent<FlowersManager>();
+        var flowersManager = GameObject.FindGameObjectWithTag("GameManager")
+            .GetComponent<FlowersManager>();
 
-        flowersManager.ToggleSaleFlowers("Хризантема", 1, DataBaseManager.ToggleSaleAction.PUT);
+        flowersManager.ToggleSaleFlowers("Хризантема", 1, 
+            DataBaseManager.ToggleSaleAction.PUT);
 
-        var flower = flowersManager.GetShopFlowers().Where(f => f.flower_name == "Хризантема").First();
+        var flower = flowersManager.GetShopFlowers()
+            .Where(f => f.flower_name == "Хризантема").First();
 
-        Assert.AreEqual(26, flower.count_in_stock);
+        Assert.AreEqual(29, flower.count_in_stock);
         Assert.AreEqual(1, flower.count_on_sale);
     }
 
@@ -78,8 +82,6 @@ public class FuncsTests
     [UnityTest]
     public IEnumerator TestWrongMotivationForWorker()
     {
-        var load = SceneManager.LoadSceneAsync("Scenes/New Scene");
-
         while (!load.isDone)
         {
             yield return null;

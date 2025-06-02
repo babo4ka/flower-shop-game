@@ -61,7 +61,7 @@ public class WorkersManager : MonoBehaviour
         }
 
         databaseManager.HireWorker(worker);
-        //availableWorkers.Remove(worker);
+        availableWorkers.Remove(worker);
         return (true, "");
     }
 
