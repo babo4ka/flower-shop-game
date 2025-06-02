@@ -19,14 +19,13 @@ public class MoveScript : MonoBehaviour
     [SerializeField] float backIndent = 24;
     [SerializeField] float xRotation = 30f;
 
-    private void OnMouseDown()
+    public void OnMouseDown()
     {
         if (!EventSystem.current.IsPointerOverGameObject())
         {
             movingManager.AddPosition(gameObject.name);
             MoveToPos();
-        }
-        
+        } 
     }
 
     private void Awake()
@@ -64,9 +63,9 @@ public class MoveScript : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
             float t = Mathf.Clamp01(elapsedTime / duration);
-            camera.transform.position = Vector3.Lerp(from, to, t);
-            camera.transform.rotation = Quaternion.Lerp(fromRotation, toRotation, t);
-        }else if (elapsedTime != -1 && elapsedTime > duration)
+            camera.transform.SetPositionAndRotation(Vector3.Lerp(from, to, t), Quaternion.Lerp(fromRotation, toRotation, t));
+        }
+        else if (elapsedTime != -1 && elapsedTime > duration)
         {
             elapsedTime = -1;
         }

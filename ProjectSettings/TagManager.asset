@@ -6,6 +6,7 @@ TagManager:
   tags:
   - boxDefault
   - GameManager
+  - FlowerObject
   layers:
   - Default
   - TransparentFX
